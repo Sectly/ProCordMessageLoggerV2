@@ -1,5 +1,5 @@
 /**
- * @name ProCord_MessageLoggerV2
+ * @name ProCord_MessageLogger
  * @version 1.8.4
  * @author Sectly_playz#1404
  * @authorId 587708664488656933
@@ -33,7 +33,7 @@
 
 module.exports = class MessageLoggerV2 {
   getName() {
-    return 'ProCord_MessageLoggerV2';
+    return 'ProCord_MessageLogger';
   }
   getVersion() {
     return '1.8.4';
@@ -178,16 +178,16 @@ module.exports = class MessageLoggerV2 {
       {
         title: 'Added',
         type: 'added',
-        items: ['Bug Fix!']
+        items: ['Added the option of using a different style to indicate a message is deleted. You can enable it by going to message loggers settings, under Display Settings it is listed as `Use red background instead of red text for deleted messages`']
       },
       {
         type: 'description',
-        content: 'Small bug fix'
+        content: 'Added new delete message style!'
       },
       {
         title: 'Fixed',
         type: 'fixed',
-        items: ['Fixed update notfication spam']
+        items: ['Fixed channel context menu not containing message logger options.', 'Fixed logging bot messages only you can see.', 'Fixed not logging bot messages if they were created due to someone using a command.', 'Fixed up menu styling a bit.', 'Fixed edits showing in replies.']
       }
     ];
   }
@@ -214,7 +214,7 @@ module.exports = class MessageLoggerV2 {
     if (BdApi.Plugins && BdApi.Plugins.get('MessageLogger') && BdApi.Plugins.isEnabled('MessageLogger')) XenoLib.Notifications.warning(`[**${this.getName()}**] Using **MessageLogger** with **${this.getName()}** is completely unsupported and will cause issues. Please either disable **MessageLogger** or delete it to avoid issues.`, { timeout: 0 });
     if (window.ED && !this.__isPowerCord) XenoLib.Notifications.warning(`[${this.getName()}] EnhancedDiscord is unsupported! Expect unintended issues and bugs.`, { timeout: 7500 });
     const shouldPass = e => e && e.constructor && typeof e.constructor.name === 'string' && e.constructor.name.indexOf('HTML');
-    if (shouldPass(window.Lightcord)) XenoLib.Notifications.warning(`There Seems To Be An System Error Please Contact Sectly_playz#1404!`, { timeout: 0 });
+    if (shouldPass(window.Lightcord)) XenoLib.Notifications.warning(`An Core Error Has Been Found In MessageLoggerV2 Please Contact The Developer!`, { timeout: 0 });
     let defaultSettings = {
       obfuscateCSSClasses: true,
       autoBackup: false,
@@ -317,12 +317,12 @@ module.exports = class MessageLoggerV2 {
       this._autoUpdateInterval = setInterval(_ => this.automaticallyUpdate(), 1000 * 60 * 60); // 1 hour
       this.automaticallyUpdate();
     }
-    if (this.settings.versionInfo !== \ && this.settings.displayUpdateNotes) {
+    if (this.settings.versionInfo !== this.getVersion() && this.settings.displayUpdateNotes) {
       XenoLib.showChangelog(`${this.getName()} has been updated!`, this.getVersion(), this.getChanges());
       this.settings.versionInfo = this.getVersion();
       this.saveSettings();
       settingsChanged = false;
-	    XenoLib.Notifications.warning(`Welcome To Pro-Cord MessageLoggerV2!`, { timeout: 14000 });  // Quick Fix
+	  XenoLib.Notifications.warning(`Welcome To Pro-Cord MessageLoggerV2 (This Message Automatically Go Away)!`, { timeout: 14000 });
     }
 
     if (settingsChanged) this.saveSettings();
