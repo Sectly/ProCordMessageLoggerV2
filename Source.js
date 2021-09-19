@@ -1,6 +1,6 @@
 /**
  * @name ProCord_MessageLoggerV2
- * @version 1.8.3
+ * @version 1.8.4
  * @author Sectly_playz#1404
  * @authorId 587708664488656933
  * @description Message Logger For Pro-Cord
@@ -36,7 +36,7 @@ module.exports = class MessageLoggerV2 {
     return 'ProCord_MessageLoggerV2';
   }
   getVersion() {
-    return '1.8.3';
+    return '1.8.4';
   }
   getAuthor() {
     return 'Sectly_playz#1404';
@@ -322,7 +322,7 @@ module.exports = class MessageLoggerV2 {
       this.settings.versionInfo = this.getVersion();
       this.saveSettings();
       settingsChanged = false;
-	    XenoLib.Notifications.warning(`Welcome To Pro-Cord MessageLoggerV2!`, { timeout: 0 });  // Quick Fix
+	    XenoLib.Notifications.warning(`Welcome To Pro-Cord MessageLoggerV2!`, { timeout: 4 });  // Quick Fix
     }
 
     if (settingsChanged) this.saveSettings();
