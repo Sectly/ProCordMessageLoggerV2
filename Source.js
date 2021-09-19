@@ -1,6 +1,6 @@
 /**
  * @name ProCord_MessageLogger
- * @version 1.8.0
+ * @version 1.8.1
  * @author Sectly_playz#1404
  * @authorId 587708664488656933
  * @description Message Logger For Pro-Cord
@@ -36,7 +36,7 @@ module.exports = class MessageLoggerV2 {
     return 'ProCord_MessageLogger';
   }
   getVersion() {
-    return '1.8.0';
+    return '1.8.1';
   }
   getAuthor() {
     return 'Sectly_playz#1404';
@@ -182,7 +182,7 @@ module.exports = class MessageLoggerV2 {
       },
       {
         type: 'description',
-        content: 'Added new delete message style!'
+        content: 'Added new delete message style & Fixed updater!'
       },
       {
         title: 'Fixed',
