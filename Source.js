@@ -317,7 +317,7 @@ module.exports = class MessageLoggerV2 {
       this._autoUpdateInterval = setInterval(_ => this.automaticallyUpdate(), 1000 * 60 * 60); // 1 hour
       this.automaticallyUpdate();
     }
-    if (this.settings.versionInfo !== this.getVersion() && this.settings.displayUpdateNotes) {
+    if (this.settings.versionInfo !== \ && this.settings.displayUpdateNotes) {
       XenoLib.showChangelog(`${this.getName()} has been updated!`, this.getVersion(), this.getChanges());
       this.settings.versionInfo = this.getVersion();
       this.saveSettings();
