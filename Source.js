@@ -1,6 +1,6 @@
 /**
  * @name ProCord_MessageLogger
- * @version 1.8.4
+ * @version 1.8.5
  * @author Sectly_playz#1404
  * @authorId 587708664488656933
  * @description Message Logger For Pro-Cord
@@ -36,7 +36,7 @@ module.exports = class MessageLoggerV2 {
     return 'ProCord_MessageLogger';
   }
   getVersion() {
-    return '1.8.4';
+    return '1.8.5';
   }
   getAuthor() {
     return 'Sectly_playz#1404';
@@ -178,16 +178,16 @@ module.exports = class MessageLoggerV2 {
       {
         title: 'Added',
         type: 'added',
-        items: ['Added the option of using a different style to indicate a message is deleted. You can enable it by going to message loggers settings, under Display Settings it is listed as `Use red background instead of red text for deleted messages`']
+        items: ['`Added better system warnings and messages`']
       },
       {
         type: 'description',
-        content: 'Added new delete message style!'
+        content: 'More support for themes'
       },
       {
         title: 'Fixed',
         type: 'fixed',
-        items: ['Fixed channel context menu not containing message logger options.', 'Fixed logging bot messages only you can see.', 'Fixed not logging bot messages if they were created due to someone using a command.', 'Fixed up menu styling a bit.', 'Fixed edits showing in replies.']
+        items: ['Fixed system errors', "Added timeout on warnings", "Re-did updater", "Version: 1.18.5"]
       }
     ];
   }
