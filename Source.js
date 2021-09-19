@@ -322,7 +322,7 @@ module.exports = class MessageLoggerV2 {
       this.settings.versionInfo = this.getVersion();
       this.saveSettings();
       settingsChanged = false;
-	    XenoLib.Notifications.warning(`Welcome To Pro-Cord MessageLoggerV2!`, { timeout: 4 });  // Quick Fix
+	    XenoLib.Notifications.warning(`Welcome To Pro-Cord MessageLoggerV2!`, { timeout: 14000 });  // Quick Fix
     }
 
     if (settingsChanged) this.saveSettings();
