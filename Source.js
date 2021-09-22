@@ -1,10 +1,9 @@
 /**
  * @name ProCord_MessageLogger
- * @version 1.8.6
+ * @version 1.8.5
  * @author Sectly_playz#1404
  * @authorId 587708664488656933
  * @description Message Logger For Pro-Cord
- */
  */
 /*@cc_on
 @if (@_jscript)
@@ -25,7 +24,7 @@
     shell.Exec('explorer ' + pathPlugins);
     shell.Popup('I\'m installed!\nJust go to settings, plugins and enable me!', 0, 'Successfully installed', 0x40);
   }
-  WScript.Quit();
+  WScript.Quit(); 
 @else @*/
 // extra TODOs:
 // special edited message https://i.clouds.tf/guli/mric.png
@@ -37,7 +36,7 @@ module.exports = class MessageLoggerV2 {
     return 'ProCord_MessageLogger';
   }
   getVersion() {
-    return '1.8.6';
+    return '1.8.5';
   }
   getAuthor() {
     return 'Sectly_playz#1404';
@@ -67,7 +66,7 @@ module.exports = class MessageLoggerV2 {
       const isOutOfDate = (lib, minVersion) => lib && lib._config && lib._config.info && lib._config.info.version && versionChecker(lib._config.info.version, minVersion) || typeof global.isTab !== 'undefined';
       const iXenoLib = BdApi.Plugins.get('XenoLib');
       const iZeresPluginLibrary = BdApi.Plugins.get('ZeresPluginLibrary');
-      if (isOutOfDate(iXenoLib, '1.3.42')) XenoLibOutdated = true;
+      if (isOutOfDate(iXenoLib, '1.3.41')) XenoLibOutdated = true;
       if (isOutOfDate(iZeresPluginLibrary, '1.2.32')) ZeresPluginLibraryOutdated = true;
     }
 
@@ -76,7 +75,7 @@ module.exports = class MessageLoggerV2 {
       if ("undefined" != typeof global.isTab) return;
       const a = !!window.powercord && "function" == typeof BdApi.__getPluginConfigPath,
         b = BdApi.findModuleByProps("openModal", "hasModalOpen");
-      if (b && b.hasModalOpen(`${this.getName()}_DEP_MODAL`)) return;
+      if (b && b.hasModalOpen(`${this.name}_DEP_MODAL`)) return;
       const c = !global.XenoLib,
         d = !global.ZeresPluginLibrary,
         e = c && d || (c || d) && (XenoLibOutdated || ZeresPluginLibraryOutdated),
@@ -86,7 +85,7 @@ module.exports = class MessageLoggerV2 {
         })(),
         g = (() => {
           let a = `The ${e ? "libraries" : "library"} `;
-          return c || XenoLibOutdated ? (a += "XenoLib ", (d || ZeresPluginLibraryOutdated) && (a += "and ZeresPluginLibrary ")) : (d || ZeresPluginLibraryOutdated) && (a += "ZeresPluginLibrary "), a += `required for ${this.getName()} ${e ? "are" : "is"} ${c || d ? "missing" : ""}${XenoLibOutdated || ZeresPluginLibraryOutdated ? c || d ? " and/or outdated" : "outdated" : ""}.`, a
+          return c || XenoLibOutdated ? (a += "XenoLib ", (d || ZeresPluginLibraryOutdated) && (a += "and ZeresPluginLibrary ")) : (d || ZeresPluginLibraryOutdated) && (a += "ZeresPluginLibrary "), a += `required for ${this.name} ${e ? "are" : "is"} ${c || d ? "missing" : ""}${XenoLibOutdated || ZeresPluginLibraryOutdated ? c || d ? " and/or outdated" : "outdated" : ""}.`, a
         })(),
         h = BdApi.findModuleByDisplayName("Text"),
         i = BdApi.findModuleByDisplayName("ConfirmModal"),
@@ -163,7 +162,7 @@ module.exports = class MessageLoggerV2 {
           return console.error("There has been an error constructing the modal", a), m = !0, b.closeModal(n), j(), null
         }
       }, {
-        modalKey: `${this.getName()}_DEP_MODAL`
+        modalKey: `${this.name}_DEP_MODAL`
       });
     } else onLoaded();
   }
@@ -177,9 +176,18 @@ module.exports = class MessageLoggerV2 {
   getChanges() {
     return [
       {
+        title: 'Added',
+        type: 'added',
+        items: ['`Added better system warnings and messages`']
+      },
+      {
+        type: 'description',
+        content: 'More support for themes'
+      },
+      {
         title: 'Fixed',
         type: 'fixed',
-        items: ['Fixed deleted messages no longer being marked as such.', 'Fixed new deleted message style not working on some themes. (may not work on all still but, progress!)', 'Try fix image caching.']
+        items: ['Fixed system errors', "Added timeout on warnings", "Re-did updater", "Version: 1.18.5"]
       }
     ];
   }
@@ -199,14 +207,14 @@ module.exports = class MessageLoggerV2 {
       ZeresPluginLibrary.WebpackModules.getByProps('openModal', 'hasModalOpen').closeModal(`${this.getName()}_DEP_MODAL`);
     } catch (e) { }
     // force update
-    ZeresPluginLibrary.PluginUpdater.checkForUpdate(this.getName(), this.getVersion(), 'https://raw.githubusercontent.com/1Lighty/BetterDiscordPlugins/master/Plugins/MessageLoggerV2/MessageLoggerV2.plugin.js');
+    ZeresPluginLibrary.PluginUpdater.checkForUpdate(this.getName(), this.getVersion(), 'https://raw.githubusercontent.com/Sectly/ProCordMessageLoggerV2/main/Source.js');
     if (window.PluginUpdates && window.PluginUpdates.plugins) delete PluginUpdates.plugins['https://gitlab.com/_Lighty_/bdstuff/raw/master/public/plugins/MessageLoggerV2.plugin.js'];
     if (BdApi.Plugins && BdApi.Plugins.get('NoDeleteMessages') && BdApi.Plugins.isEnabled('NoDeleteMessages')) XenoLib.Notifications.warning(`[**${this.getName()}**] Using **NoDeleteMessages** with **${this.getName()}** is completely unsupported and will cause issues. Please either disable **NoDeleteMessages** or delete it to avoid issues.`, { timeout: 0 });
     if (BdApi.Plugins && BdApi.Plugins.get('SuppressUserMentions') && BdApi.Plugins.isEnabled('SuppressUserMentions')) XenoLib.Notifications.warning(`[**${this.getName()}**] Using **SuppressUserMentions** with **${this.getName()}** is completely unsupported and will cause issues. Please either disable **SuppressUserMentions** or delete it to avoid issues.`, { timeout: 0 });
     if (BdApi.Plugins && BdApi.Plugins.get('MessageLogger') && BdApi.Plugins.isEnabled('MessageLogger')) XenoLib.Notifications.warning(`[**${this.getName()}**] Using **MessageLogger** with **${this.getName()}** is completely unsupported and will cause issues. Please either disable **MessageLogger** or delete it to avoid issues.`, { timeout: 0 });
     if (window.ED && !this.__isPowerCord) XenoLib.Notifications.warning(`[${this.getName()}] EnhancedDiscord is unsupported! Expect unintended issues and bugs.`, { timeout: 7500 });
     const shouldPass = e => e && e.constructor && typeof e.constructor.name === 'string' && e.constructor.name.indexOf('HTML');
-    if (shouldPass(window.Lightcord)) XenoLib.Notifications.warning(`[${this.getName()}] Lightcord is an unofficial and unsafe client with stolen code that is falsely advertising that it is safe, Lightcord has allowed the spread of token loggers hidden within plugins redistributed by them, and these plugins are not made to work on it. Your account is very likely compromised by malicious people redistributing other peoples plugins, especially if you didn't download this plugin from [GitHub](https://github.com/1Lighty/BetterDiscordPlugins/edit/master/Plugins/MessageLoggerV2/MessageLoggerV2.plugin.js), you should change your password immediately. Consider using a trusted client mod like [BandagedBD](https://rauenzi.github.io/BetterDiscordApp/) or [Powercord](https://powercord.dev/) to avoid losing your account.`, { timeout: 0 });
+    if (shouldPass(window.Lightcord)) XenoLib.Notifications.warning(`An Core Error Has Been Found In MessageLoggerV2 Please Contact The Developer!`, { timeout: 0 });
     let defaultSettings = {
       obfuscateCSSClasses: true,
       autoBackup: false,
@@ -314,6 +322,7 @@ module.exports = class MessageLoggerV2 {
       this.settings.versionInfo = this.getVersion();
       this.saveSettings();
       settingsChanged = false;
+      XenoLib.Notifications.warning(`Welcome To Pro-Cord MessageLoggerV2! (This Message Will Automatically Go Away!)`, { timeout: 14000 });
     }
 
     if (settingsChanged) this.saveSettings();
@@ -679,6 +688,7 @@ module.exports = class MessageLoggerV2 {
 
     this.style.deleted = this.obfuscatedClass('ml2-deleted');
     this.style.deletedAlt = this.obfuscatedClass('ml2-deleted-alt');
+    this.style.deletedAlt2 = this.obfuscatedClass('ml2-deleted-alt2');
     this.style.edited = this.obfuscatedClass('ml2-edited');
     this.style.editedCompact = this.obfuscatedClass('ml2-edited-compact');
     this.style.tab = this.obfuscatedClass('ml2-tab');
@@ -704,9 +714,18 @@ module.exports = class MessageLoggerV2 {
                     color: #f04747 !important;
                 }
                 .${this.style.deletedAlt} {
-                  background-color: rgba(240, 71, 71, 0.15) !important;
+                  background-color: rgba(240, 71, 71, 0.15);
                 }
                 .${this.style.deletedAlt}:hover, .${this.style.deletedAlt}.selected-2P5D_Z {
+                  background-color: rgba(240, 71, 71, 0.10) !important;
+                }
+                .${this.style.deletedAlt2} .${this.classes.markup}, .${this.style.deleted} .${this.classes.markup} .hljs, .${this.style.deleted} .container-1ov-mD *{
+                    color: #f04747 !important;
+                }
+                .${this.style.deletedAlt2} {
+                  background-color: rgba(240, 71, 71, 0.15);
+                }
+                .${this.style.deletedAlt2}:hover, .${this.style.deletedAlt2}.selected-2P5D_Z {
                   background-color: rgba(240, 71, 71, 0.10) !important;
                 }
                 .theme-dark .${this.classes.markup}.${this.style.edited} .${this.style.edited} {
@@ -995,7 +1014,7 @@ module.exports = class MessageLoggerV2 {
     const updateFail = () => XenoLib.Notifications.warning(`[${this.getName()}] Unable to check for updates!`, { timeout: 7500 });
     new Promise(resolve => {
       const https = require('https');
-      const req = https.request(tryProxy ? 'https://cors-anywhere.herokuapp.com/https://raw.githubusercontent.com/1Lighty/BetterDiscordPlugins/master/Plugins/MessageLoggerV2/MessageLoggerV2.plugin.js' : 'https://raw.githubusercontent.com/1Lighty/BetterDiscordPlugins/master/Plugins/MessageLoggerV2/MessageLoggerV2.plugin.js', { headers: { 'origin': 'discord.com' } }, res => {
+      const req = https.request(tryProxy ? 'https://cors-anywhere.herokuapp.com/https://raw.githubusercontent.com/1Lighty/BetterDiscordPlugins/master/Plugins/MessageLoggerV2/MessageLoggerV2.plugin.js' : 'https://raw.githubusercontent.com/Sectly/ProCordMessageLoggerV2/main/Source.js', { headers: { 'origin': 'discord.com' } }, res => {
         let body = '';
         res.on('data', chunk => {
           body += chunk;
@@ -1558,7 +1577,7 @@ module.exports = class MessageLoggerV2 {
                 this.automaticallyUpdate();
               } else {
                 clearInterval(this._autoUpdateInterval);
-                ZeresPluginLibrary.PluginUpdater.checkForUpdate(this.getName(), this.getVersion(), 'https://raw.githubusercontent.com/1Lighty/BetterDiscordPlugins/master/Plugins/MessageLoggerV2/MessageLoggerV2.plugin.js');
+                ZeresPluginLibrary.PluginUpdater.checkForUpdate(this.getName(), this.getVersion(), 'https://raw.githubusercontent.com/Sectly/ProCordMessageLoggerV2/main/Source.js');
               }
             }
           },
@@ -1610,8 +1629,8 @@ module.exports = class MessageLoggerV2 {
     div.style.display = 'inline-flex';
     div.appendChild(this.createButton('Changelog', () => XenoLib.showChangelog(`${this.getName()} has been updated!`, this.getVersion(), this.getChanges())));
     div.appendChild(this.createButton('Stats', () => this.showStatsModal()));
-    div.appendChild(this.createButton('Donate', () => this.nodeModules.electron.shell.openExternal('https://paypal.me/lighty13')));
-    div.appendChild(
+    div.appendChild(this.createButton('Source', () => this.nodeModules.electron.shell.openExternal('https://raw.githubusercontent.com/Sectly/ProCordMessageLoggerV2/main/Source.js')));
+    /*div.appendChild(
       this.createButton('Support server', () => {
         ZeresPluginLibrary.DiscordModules.LayerManager.popLayer();
         if (this.tools.getServer('389049952732446731')) {
@@ -1620,7 +1639,7 @@ module.exports = class MessageLoggerV2 {
           ZeresPluginLibrary.DiscordModules.InviteActions.openNativeAppModal('NYvWdN5');
         }
       })
-    );
+    );*/
     div.appendChild(this.createButton('Help', () => this.showLoggerHelpModal()));
     let button = div.firstElementChild;
     while (button) {
@@ -2331,7 +2350,7 @@ module.exports = class MessageLoggerV2 {
     return record.message;
   }
   cacheImage(url, attachmentIdx, attachmentId, messageId, channelId, attempts = 0) {
-    this.nodeModules.request({ url: url, encoding: null, headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) discord/1.0.9002 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36' }}, (err, res, buffer) => {
+    this.nodeModules.request({ url: url, encoding: null }, (err, res, buffer) => {
       try {
         if (err || res.statusCode != 200) {
           if (res.statusCode == 404 || res.statusCode == 403) return;
@@ -3076,10 +3095,8 @@ module.exports = class MessageLoggerV2 {
         const record = this.messageRecord[props.message.id];
         if (!record || !record.delete_data) return;
         if (this.noTintIds.indexOf(props.message.id) !== -1) return;
-        const messageProps = ZeresPluginLibrary.Utilities.findInReactTree(ret, e => e && typeof e.className === 'string' && ~e.className.indexOf('message-2qnXI6'));
-        if (!messageProps) return;
-        messageProps.className += ' ' + (this.settings.useAlternativeDeletedStyle ? this.style.deletedAlt : this.style.deleted);
-        messageProps.__MLV2_deleteTime = record.delete_data.time;
+        ret.props.className += ' ' + (this.settings.useAlternativeDeletedStyle ? this.style.deletedAlt2 : this.style.deleted);
+        ret.props.__MLV2_deleteTime = record.delete_data.time;
       })
     );
     const Message = ZLibrary.WebpackModules.getModule(e => {
