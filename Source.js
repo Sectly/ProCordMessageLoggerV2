@@ -1,6 +1,6 @@
 /**
  * @name ProCord_MessageLogger
- * @version 1.8.6
+ * @version 1.8.7
  * @author Sectly_playz#1404
  * @authorId 587708664488656933
  * @description Message Logger For Pro-Cord
@@ -36,7 +36,7 @@ module.exports = class MessageLoggerV2 {
     return 'ProCord_MessageLogger';
   }
   getVersion() {
-    return '1.8.6';
+    return '1.8.7';
   }
   getAuthor() {
     return 'Sectly_playz#1404';
@@ -178,16 +178,16 @@ module.exports = class MessageLoggerV2 {
       {
         title: 'Added',
         type: 'added',
-        items: ['`Better theme support i guess`']
+        items: ['`V: 1.8.7`']
       },
       {
         type: 'description',
-        content: 'More support for themes'
+        content: 'Fixed some stuff i guess.'
       },
       {
         title: 'Fixed',
         type: 'fixed',
-        items: ['Fixed deleted messages no longer being marked as such.', 'Fixed new deleted message style not working on some themes. (may not work on all still but, progress!)', 'Try fix image caching.']
+        items: ['Fixed not working at all causing channels to no longer load.', 'Try to make new deleted messages style work with more themes.']
       }
     ];
   }
@@ -595,7 +595,7 @@ module.exports = class MessageLoggerV2 {
       avatar: this.safeGetClass(() => XenoLib.getSingleClass('header avatar', true), 'avatar-MLV2')
     };
 
-    this.muteModule = ZeresPluginLibrary.WebpackModules.find(m => m.isMuted);
+    this.muteModule = ZeresPluginLibrary.WebpackModules.find(m => m.isChannelMuted);
 
     this.menu = {};
     this.menu.classes = {};
@@ -713,10 +713,10 @@ module.exports = class MessageLoggerV2 {
                 .${this.style.deleted} .${this.classes.markup}, .${this.style.deleted} .${this.classes.markup} .hljs, .${this.style.deleted} .container-1ov-mD *{
                     color: #f04747 !important;
                 }
-                .${this.style.deletedAlt} {
+                html #app-mount .${this.style.deletedAlt} {
                   background-color: rgba(240, 71, 71, 0.15) !important;
                 }
-                .${this.style.deletedAlt}:hover, .${this.style.deletedAlt}.selected-2P5D_Z {
+                html #app-mount .${this.style.deletedAlt}:hover, html #app-mount .${this.style.deletedAlt}.selected-2P5D_Z {
                   background-color: rgba(240, 71, 71, 0.10) !important;
                 }
                 .${this.style.deletedAlt2} .${this.classes.markup}, .${this.style.deleted} .${this.classes.markup} .hljs, .${this.style.deleted} .container-1ov-mD *{
@@ -725,7 +725,7 @@ module.exports = class MessageLoggerV2 {
                 .${this.style.deletedAlt2} {
                   background-color: rgba(240, 71, 71, 0.15);
                 }
-                .${this.style.deletedAlt2}:hover, .${this.style.deletedAlt2}.selected-2P5D_Z {
+                html #app-mount .${this.style.deletedAlt2}:hover, html #app-mount .${this.style.deletedAlt2}.selected-2P5D_Z {
                   background-color: rgba(240, 71, 71, 0.10) !important;
                 }
                 .theme-dark .${this.classes.markup}.${this.style.edited} .${this.style.edited} {
