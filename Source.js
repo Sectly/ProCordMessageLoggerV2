@@ -178,7 +178,7 @@ module.exports = class MessageLoggerV2 {
       {
         title: 'Added',
         type: 'added',
-        items: ['`V: 1.8.7`']
+        items: ['`V: 1.8.8`']
       },
       {
         type: 'description',
