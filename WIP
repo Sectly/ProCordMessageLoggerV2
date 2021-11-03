@@ -1,32 +1,3 @@
-Skip to content
-Search or jump to…
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@Sectly 
-1Lighty
-/
-BetterDiscordPlugins
-Public
-15
-193222
-Code
-Pull requests
-1
-Actions
-Security
-Insights
-BetterDiscordPlugins/Plugins/MessageLoggerV2/MessageLoggerV2.plugin.js /
-@1Lighty
-1Lighty MLv2 v1.8.5
-Latest commit 1b91642 7 days ago
- History
- 4 contributors
-@1Lighty@Tibowl@clv-2@Aikufurr
-4753 lines (4580 sloc)  231 KB
-   
 /**
  * @name MessageLoggerV2
  * @version 1.8.5
@@ -746,15 +717,19 @@ module.exports = class MessageLoggerV2 {
                 .theme-light .${this.classes.markup}.${this.style.edited} .${this.style.edited} {
                     opacity: 0.5;
                 }
+
                 .${this.style.editedCompact} {
                     text-indent: 0;
                 }
+
                 .theme-dark .${this.style.deleted}:not(:hover) img:not(.${this.classes.avatar}), .${this.style.deleted}:not(:hover) .mention, .${this.style.deleted}:not(:hover) .reactions, .${this.style.deleted}:not(:hover) a {
                     filter: grayscale(100%) !important;
                 }
+
                 .${this.style.deleted} img:not(.${this.classes.avatar}), .${this.style.deleted} .mention, .${this.style.deleted} .reactions, .${this.style.deleted} a {
                     transition: filter 0.3s !important;
                 }
+
                 .theme-dark .${this.style.tab} {
                     border-color: transparent;
                     color: rgba(255, 255, 255, 0.4);
@@ -765,9 +740,11 @@ module.exports = class MessageLoggerV2 {
                     color: rgba(0, 0, 0, 0.4);
                     padding: 0px 24px;
                 }
+
                 #sent.${this.style.tab} {
                   display: none;
                 }
+
                 .theme-dark  .${this.style.tabSelected} {
                     border-color: rgb(255, 255, 255);
                     color: rgb(255, 255, 255);
@@ -776,15 +753,19 @@ module.exports = class MessageLoggerV2 {
                     border-color: rgb(0, 0, 0);
                     color: rgb(0, 0, 0);
                 }
+
                 #${this.style.menuTabBar} {
                   justify-content: space-around;
                 }
+
                 .${this.style.textIndent} {
                     margin-left: 40px;
                 }
+
                 .${this.style.imageRoot} {
                   pointer-events: all;
                 }
+
                 #${this.style.menuMessages} {
                   max-height: 0px;
                 }
@@ -2233,6 +2214,7 @@ module.exports = class MessageLoggerV2 {
    sorted by time, newest to oldest
    lowest IDX that is higher than lowestTime, unless channelEnd, then it's 0
    highest IDX that is lower than highestTime, unless channelStart, then it's savedIDs.length - 1
+
    savedIDs sliced start lowest IDX, end highest IDX + 1
    appended IDs
    sorted by time, oldest to newest
@@ -4051,9 +4033,13 @@ module.exports = class MessageLoggerV2 {
                         "user: <username, nickname or userid>" - Filter results with the specified username, nickname or userid.
                         "message: <search or messageid>" or "content: <search or messageid>" - Filter results with the specified message content.
                         "has: <image|link> - Filter results to only images or links
+
                         Separate the search tags with commas.
                         Example: server: tom's bd stuff, message: heck
+
+
                         Shortcut help:
+
                         "Ctrl + M" (default) - Open message log.
                         "Ctrl + N" (default) - Open message log with selected channel filtered.\n\n</div>`.replace(/\n/g, '</br>')
             ),
@@ -4765,16 +4751,3 @@ module.exports = class MessageLoggerV2 {
   /* ==================================================-|| END CONTEXT MENU ||-================================================== */
 };
 /*@end @*/
-© 2021 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
-Loading complete
