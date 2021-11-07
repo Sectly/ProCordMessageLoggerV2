@@ -1,6 +1,6 @@
 /**
  * @name ProCord_MessageLogger
- * @version 1.8.8
+ * @version 1.8.6
  * @author Sectly_playz#1404
  * @authorId 587708664488656933
  * @description Message Logger For Pro-Cord Or Discord
@@ -36,7 +36,7 @@ module.exports = class MessageLoggerV2 {
     return 'MessageLoggerV2';
   }
   getVersion() {
-    return '1.8.9';
+    return '1.8.6';
   }
   getAuthor() {
     return 'Sectly_playz#1404';
@@ -55,7 +55,7 @@ module.exports = class MessageLoggerV2 {
         ZeresPluginLibrary.Logger.stacktrace(this.getName(), 'Failed to start!', err);
         ZeresPluginLibrary.Logger.err(this.getName(), `If you cannot solve this yourself, contact ${this.getAuthor()} and provide the errors shown here.`);
         this.stop();
-        XenoLib.Notifications.error(`[**${this.getName()}**] Failed to start! Try to CTRL + R, or update the plugin`, { timeout: 0 });
+        XenoLib.Notifications.error(`[**${this.getName()}**] Failed to start! Try to CTRL + R, or update the plugin, like so\n![image](https://i.imgur.com/tsv6aW8.png)`, { timeout: 0 });
       }
     };
     this.pluginDir = (BdApi.Plugins && BdApi.Plugins.folder) || window.ContentManager.pluginsFolder;
@@ -181,7 +181,7 @@ module.exports = class MessageLoggerV2 {
       {
         title: 'Fixed',
         type: 'fixed',
-        items: ['Fixed context menu missing on channels.', 'Fixed edited tag being empty.', 'Fixed menu search bar vanishing.']
+        items: ['Fixed The Message Logger Source', 'Fixed context menu missing on channels.', 'Fixed edited tag being empty.', 'Fixed menu search bar vanishing.']
       }
     ];
   }
@@ -202,16 +202,16 @@ module.exports = class MessageLoggerV2 {
     } catch (e) { }
     // force update
     ZeresPluginLibrary.PluginUpdater.checkForUpdate(this.getName(), this.getVersion(), 'https://raw.githubusercontent.com/Sectly/ProCordMessageLoggerV2/main/Source.js');
-    if (window.PluginUpdates && window.PluginUpdates.plugins) delete PluginUpdates.plugins['https://raw.githubusercontent.com/Sectly/ProCordMessageLoggerV2/main/Source.js'];
+    if (window.PluginUpdates && window.PluginUpdates.plugins) delete PluginUpdates.plugins['https://raw.githubusercontent.com/Sectly/ProCordMessageLoggerV2/main/OldSource.js'];
     if (BdApi.Plugins && BdApi.Plugins.get('NoDeleteMessages') && BdApi.Plugins.isEnabled('NoDeleteMessages')) XenoLib.Notifications.warning(`[**${this.getName()}**] Using **NoDeleteMessages** with **${this.getName()}** is completely unsupported and will cause issues. Please either disable **NoDeleteMessages** or delete it to avoid issues.`, { timeout: 0 });
     if (BdApi.Plugins && BdApi.Plugins.get('SuppressUserMentions') && BdApi.Plugins.isEnabled('SuppressUserMentions')) XenoLib.Notifications.warning(`[**${this.getName()}**] Using **SuppressUserMentions** with **${this.getName()}** is completely unsupported and will cause issues. Please either disable **SuppressUserMentions** or delete it to avoid issues.`, { timeout: 0 });
     if (BdApi.Plugins && BdApi.Plugins.get('MessageLogger') && BdApi.Plugins.isEnabled('MessageLogger')) XenoLib.Notifications.warning(`[**${this.getName()}**] Using **MessageLogger** with **${this.getName()}** is completely unsupported and will cause issues. Please either disable **MessageLogger** or delete it to avoid issues.`, { timeout: 0 });
     if (window.ED && !this.__isPowerCord) XenoLib.Notifications.warning(`[${this.getName()}] EnhancedDiscord is unsupported! Expect unintended issues and bugs.`, { timeout: 7500 });
     const shouldPass = e => e && e.constructor && typeof e.constructor.name === 'string' && e.constructor.name.indexOf('HTML');
-    if (shouldPass(window.Lightcord)) XenoLib.Notifications.warning(`[${this.getName()}] Message Logger Is Activated`, { timeout: 0 });
+    if (shouldPass(window.Lightcord)) XenoLib.Notifications.warning(`[${this.getName()}] Welcome To Sectly_playz#1404's Message Logger! [GitHub](https://github.com/Sectly/ProCordMessageLoggerV2), Thanks For Using My Plugin!`, { timeout: 0 });
     let defaultSettings = {
       obfuscateCSSClasses: true,
-      autoBackup: false,
+      autoBackup: true,
       dontSaveData: false,
       displayUpdateNotes: true,
       ignoreMutedGuilds: true,
@@ -219,10 +219,10 @@ module.exports = class MessageLoggerV2 {
       ignoreBots: true,
       ignoreSelf: false,
       ignoreBlockedUsers: true,
-      ignoreNSFW: false,
+      ignoreNSFW: true,
       ignoreLocalEdits: false,
       ignoreLocalDeletes: false,
-      alwaysLogGhostPings: false,
+      alwaysLogGhostPings: true,
       showOpenLogsButton: true,
       messageCacheCap: 1000,
       savedMessagesCap: 1000,
@@ -248,7 +248,7 @@ module.exports = class MessageLoggerV2 {
       blockSpamEdit: false,
       disableKeybind: false,
       cacheAllImages: true,
-      dontDeleteCachedImages: false,
+      dontDeleteCachedImages: true,
       aggresiveMessageCaching: true,
       // openLogKeybind: [
       //   /* 162, 77 */
@@ -262,7 +262,7 @@ module.exports = class MessageLoggerV2 {
       displayDates: true,
       deletedMessageColor: '',
       editedMessageColor: '',
-      useAlternativeDeletedStyle: false,
+      useAlternativeDeletedStyle: true,
       showEditedMessages: true,
       showDeletedMessages: true,
       showPurgedMessages: true,
@@ -704,7 +704,7 @@ module.exports = class MessageLoggerV2 {
                 .${this.style.deleted} .${this.classes.markup}, .${this.style.deleted} .${this.classes.markup} .hljs, .${this.style.deleted} .container-1ov-mD *{
                     color: #f04747 !important;
                 }
-				.${this.style.deletedAlt} .${this.classes.markup}, .${this.style.deletedAlt} .${this.classes.markup} .hljs, .${this.style.deletedAlt} .container-1ov-mD *{
+                .${this.style.deletedAlt} .${this.classes.markup}, .${this.style.deletedAlt} .${this.classes.markup} .hljs, .${this.style.deletedAlt} .container-1ov-mD *{
                     color: #f04747 !important;
                 }
                 html #app-mount .${this.style.deletedAlt} {
@@ -1002,7 +1002,7 @@ module.exports = class MessageLoggerV2 {
     const updateFail = () => XenoLib.Notifications.warning(`[${this.getName()}] Unable to check for updates!`, { timeout: 7500 });
     new Promise(resolve => {
       const https = require('https');
-      const req = https.request(tryProxy ? 'https://cors-anywhere.herokuapp.com/https://raw.githubusercontent.com/Sectly/ProCordMessageLoggerV2/main/Source.js' : 'https://raw.githubusercontent.com/Sectly/ProCordMessageLoggerV2/main/Source.js', { headers: { 'origin': 'discord.com' } }, res => {
+      const req = https.request(tryProxy ? 'https://cors-anywhere.herokuapp.com/https://github.com/Sectly/ProCordMessageLoggerV2/blob/main/Source.js' : 'https://github.com/Sectly/ProCordMessageLoggerV2/blob/main/Source.js', { headers: { 'origin': 'discord.com' } }, res => {
         let body = '';
         res.on('data', chunk => {
           body += chunk;
@@ -1617,6 +1617,7 @@ module.exports = class MessageLoggerV2 {
     div.style.display = 'inline-flex';
     div.appendChild(this.createButton('Changelog', () => XenoLib.showChangelog(`${this.getName()} has been updated!`, this.getVersion(), this.getChanges())));
     div.appendChild(this.createButton('Stats', () => this.showStatsModal()));
+    div.appendChild(this.createButton('Donate', () => this.nodeModules.electron.shell.openExternal('https://www.roblox.com/catalog/7929605669/Donation')));
     div.appendChild(
       this.createButton('Support server', () => {
         ZeresPluginLibrary.DiscordModules.LayerManager.popLayer();
