@@ -1619,9 +1619,9 @@ module.exports = class MessageLoggerV2 {
     div.appendChild(this.createButton('Stats', () => this.showStatsModal()));
     div.appendChild(this.createButton('Donate', () => this.nodeModules.electron.shell.openExternal('https://www.roblox.com/catalog/7929605669/Donation')));
     div.appendChild(
-      this.createButton('Support server', () => {
+      this.createButton('Support Server', () => {
         ZeresPluginLibrary.DiscordModules.LayerManager.popLayer();
-        if (this.tools.getServer('389049952732446731')) {
+        if (this.tools.getServer('0')) {
           ZeresPluginLibrary.DiscordModules.GuildActions.transitionToGuildSync('389049952732446731');
         } else {
           ZeresPluginLibrary.DiscordModules.InviteActions.openNativeAppModal('NYvWdN5');
