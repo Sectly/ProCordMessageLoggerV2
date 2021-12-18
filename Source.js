@@ -1,6 +1,6 @@
 /**
  * @name ProCord_MessageLogger
- * @version 1.8.6
+ * @version 1.8.7
  * @author Sectly_playz#1404
  * @authorId 587708664488656933
  * @description Message Logger For Pro-Cord Or Discord
@@ -36,7 +36,7 @@ module.exports = class MessageLoggerV2 {
     return 'MessageLoggerV2';
   }
   getVersion() {
-    return '1.8.6';
+    return '1.8.7';
   }
   getAuthor() {
     return 'Sectly_playz#1404';
