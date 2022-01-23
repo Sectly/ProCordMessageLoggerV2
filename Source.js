@@ -1,9 +1,13 @@
 /**
+/**
  * @name ProCord_MessageLogger
- * @version 1.8.9
+ * @version 1.9.0
  * @author Sectly_playz#1404
  * @authorId 587708664488656933
  * @description Message Logger For Pro-Cord Or Discord
+ * @website https://www.sectly.online
+ * @source https://github.com/Sectly/ProCordMessageLoggerV2/blob/main/Source.js
+ * @updateUrl https://raw.githubusercontent.com/Sectly/ProCordMessageLoggerV2/main/Source.js
  */
 /*@cc_on
 @if (@_jscript)
@@ -36,7 +40,7 @@ module.exports = class MessageLoggerV2 {
     return 'MessageLoggerV2';
   }
   getVersion() {
-    return '1.8.9';
+    return '1.9.0';
   }
   getAuthor() {
     return 'Sectly_playz#1404';
@@ -69,7 +73,7 @@ module.exports = class MessageLoggerV2 {
       let iZeresPluginLibrary = BdApi.Plugins.get('ZeresPluginLibrary');
       if (iXenoLib && iXenoLib.instance) iXenoLib = iXenoLib.instance;
       if (iZeresPluginLibrary && iZeresPluginLibrary.instance) iZeresPluginLibrary = iZeresPluginLibrary.instance;
-      if (isOutOfDate(iXenoLib, '1.4.1')) XenoLibOutdated = true;
+      if (isOutOfDate(iXenoLib, '1.4.2')) XenoLibOutdated = true;
       if (isOutOfDate(iZeresPluginLibrary, '1.2.33')) ZeresPluginLibraryOutdated = true;
     }
 
@@ -179,9 +183,9 @@ module.exports = class MessageLoggerV2 {
   getChanges() {
     return [
       {
-        title: 'Fixes',
+        title: 'HOTFIX',
         type: 'fixed',
-        items: ['Fixed deleted messages not appearing as so', 'Fixed menu being borked beyond repair', '<a:FA_FoxWork:742462902384197752>']
+        items: ['Not working hotfix.', '<a:FA_FoxWork:742462902384197752>']
       }
     ];
   }
@@ -202,13 +206,13 @@ module.exports = class MessageLoggerV2 {
     } catch (e) { }
     // force update
     ZeresPluginLibrary.PluginUpdater.checkForUpdate(this.getName(), this.getVersion(), 'https://raw.githubusercontent.com/Sectly/ProCordMessageLoggerV2/main/Source.js');
-    if (window.PluginUpdates && window.PluginUpdates.plugins) delete PluginUpdates.plugins['https://raw.githubusercontent.com/Sectly/ProCordMessageLoggerV2/main/Source.js'];
+    if (window.PluginUpdates && window.PluginUpdates.plugins) delete PluginUpdates.plugins['https://raw.githubusercontent.com/Sectly/ProCordMessageLoggerV2/main/OldSource.js'];
     if (BdApi.Plugins && BdApi.Plugins.get('NoDeleteMessages') && BdApi.Plugins.isEnabled('NoDeleteMessages')) XenoLib.Notifications.warning(`[**${this.getName()}**] Using **NoDeleteMessages** with **${this.getName()}** is completely unsupported and will cause issues. Please either disable **NoDeleteMessages** or delete it to avoid issues.`, { timeout: 0 });
     if (BdApi.Plugins && BdApi.Plugins.get('SuppressUserMentions') && BdApi.Plugins.isEnabled('SuppressUserMentions')) XenoLib.Notifications.warning(`[**${this.getName()}**] Using **SuppressUserMentions** with **${this.getName()}** is completely unsupported and will cause issues. Please either disable **SuppressUserMentions** or delete it to avoid issues.`, { timeout: 0 });
     if (BdApi.Plugins && BdApi.Plugins.get('MessageLogger') && BdApi.Plugins.isEnabled('MessageLogger')) XenoLib.Notifications.warning(`[**${this.getName()}**] Using **MessageLogger** with **${this.getName()}** is completely unsupported and will cause issues. Please either disable **MessageLogger** or delete it to avoid issues.`, { timeout: 0 });
     if (window.ED && !this.__isPowerCord) XenoLib.Notifications.warning(`[${this.getName()}] EnhancedDiscord is unsupported! Expect unintended issues and bugs.`, { timeout: 7500 });
     const shouldPass = e => e && e.constructor && typeof e.constructor.name === 'string' && e.constructor.name.indexOf('HTML');
-    if (shouldPass(window.Lightcord)) XenoLib.Notifications.warning(`[${this.getName()}] I'm Sorry But Lightcord Is Not Supported And We Don't Recomend Using It!`, { timeout: 0 });
+    if (shouldPass(window.Lightcord)) XenoLib.Notifications.warning(`[${this.getName()}] Lightcord is an unofficial and unsafe client with stolen code that is falsely advertising that it is safe, Lightcord has allowed the spread of token loggers hidden within plugins redistributed by them, and these plugins are not made to work on it. Your account is very likely compromised by malicious people redistributing other peoples plugins, especially if you didn't download this plugin from [GitHub](https://github.com/Sectly/ProCordMessageLoggerV2/blob/main/Source.js), you should change your password immediately. Consider using a trusted client mod like [BandagedBD](https://rauenzi.github.io/BetterDiscordApp/) or [Powercord](https://powercord.dev/) to avoid losing your account.`, { timeout: 0 });
     let defaultSettings = {
       obfuscateCSSClasses: true,
       autoBackup: false,
@@ -262,7 +266,7 @@ module.exports = class MessageLoggerV2 {
       displayDates: true,
       deletedMessageColor: '',
       editedMessageColor: '',
-      useAlternativeDeletedStyle: false,
+      useAlternativeDeletedStyle: true,
       showEditedMessages: true,
       showDeletedMessages: true,
       showPurgedMessages: true,
@@ -501,10 +505,6 @@ module.exports = class MessageLoggerV2 {
     );
 
     const mentionedModule = ZeresPluginLibrary.WebpackModules.find(m => typeof m.isMentioned === 'function');
-    this.currentChannel = _ => {
-      const channel = this.ChannelStore.getChannel(ZeresPluginLibrary.DiscordModules.SelectedChannelStore.getChannelId());
-      return channel ? ZeresPluginLibrary.Structs.Channel.from(channel) : null;
-    }
 
     this.tools = {
       openUserContextMenu: null /* NeatoLib.Modules.get('openUserContextMenu').openUserContextMenu */, // TODO: move here
@@ -698,6 +698,9 @@ module.exports = class MessageLoggerV2 {
       (this.style.css = !this.settings.obfuscateCSSClasses ? 'ML2-CSS' : this.randomString()),
       `
                 .${this.style.deleted} .${this.classes.markup}, .${this.style.deleted} .${this.classes.markup} .hljs, .${this.style.deleted} .container-1ov-mD *{
+                    color: #f04747 !important;
+                }
+				.${this.style.deletedAlt} .${this.classes.markup}, .${this.style.deletedAlt} .${this.classes.markup} .hljs, .${this.style.deletedAlt} .container-1ov-mD *{
                     color: #f04747 !important;
                 }
                 html #app-mount .${this.style.deletedAlt} {
@@ -995,7 +998,7 @@ module.exports = class MessageLoggerV2 {
       this.menu.filter = `channel:${this.selectedChannel.id}`;
       this.openWindow();
     });
-    new ZeresPluginLibrary.EmulatedTooltip(this.channelLogButton, 'Open Logs', { side: 'bottom' });
+    // new ZeresPluginLibrary.EmulatedTooltip(this.channelLogButton, 'Open Logs', { side: 'bottom' });
 
     if (this.settings.showOpenLogsButton) this.addOpenLogsButton();
 
@@ -1011,7 +1014,7 @@ module.exports = class MessageLoggerV2 {
 
     this.unpatches.push(
       this.Patcher.instead(this.messageStore, 'getLastEditableMessage', (_this, [channelId]) => {
-        const me = ZeresPluginLibrary.DiscordAPI.currentUser.id;
+        const me = XenoLib.DiscordAPI.userId;
         return _this
           .getMessages(channelId)
           .toArray()
@@ -1708,7 +1711,7 @@ module.exports = class MessageLoggerV2 {
     div.style.display = 'inline-flex';
     div.appendChild(this.createButton('Changelog', () => XenoLib.showChangelog(`${this.getName()} has been updated!`, this.getVersion(), this.getChanges())));
     div.appendChild(this.createButton('Stats', () => this.showStatsModal()));
-    div.appendChild(this.createButton('Source', () => this.nodeModules.electron.shell.openExternal('https://github.com/Sectly/ProCordMessageLoggerV2')));
+    div.appendChild(this.createButton('Website', () => this.nodeModules.electron.shell.openExternal('https://www.sectly.online')));
     div.appendChild(this.createButton('Help', () => this.showLoggerHelpModal()));
     let button = div.firstElementChild;
     while (button) {
@@ -2109,7 +2112,7 @@ module.exports = class MessageLoggerV2 {
     message.embeds = message.embeds.map(this.cleanupEmbed);
   }
   isCompact() {
-    return ZeresPluginLibrary.DiscordAPI.UserSettings.displayCompact; // can't get a reference
+    return false; // fix if someone complains, no one has so far so who cares
   }
   /* ==================================================-|| END HELPERS ||-================================================== */
   /* ==================================================-|| START MISC ||-================================================== */
@@ -2669,7 +2672,7 @@ module.exports = class MessageLoggerV2 {
           }
           this.saveDeletedMessage(deleted, this.deletedMessageRecord);
           this.saveData();
-          if (this.currentChannel() && this.currentChannel().id === dispatch.channelId) ZeresPluginLibrary.DiscordModules.Dispatcher.dispatch({ type: 'MLV2_FORCE_UPDATE_MESSAGE', id: dispatch.id });
+          if (XenoLib.DiscordAPI.channelId.id === dispatch.channelId) ZeresPluginLibrary.DiscordModules.Dispatcher.dispatch({ type: 'MLV2_FORCE_UPDATE_MESSAGE', id: dispatch.id });
         } else if (dispatch.type === 'MESSAGE_UPDATE') {
           if (!dispatch.message.edited_timestamp) {
             if (dispatch.message.embeds) {
@@ -2836,7 +2839,7 @@ module.exports = class MessageLoggerV2 {
         this.saveDeletedMessage(deleted, this.deletedMessageRecord);
         // if (this.settings.cacheAllImages) this.cacheImages(deleted);
         if (!this.settings.showDeletedMessages) callDefault(...args);
-        else if (this.currentChannel() && this.currentChannel().id === dispatch.channelId) ZeresPluginLibrary.DiscordModules.Dispatcher.dispatch({ type: 'MLV2_FORCE_UPDATE_MESSAGE', id: dispatch.id });
+        else if (XenoLib.DiscordAPI.channelId === dispatch.channelId) ZeresPluginLibrary.DiscordModules.Dispatcher.dispatch({ type: 'MLV2_FORCE_UPDATE_MESSAGE', id: dispatch.id });
         this.saveData();
       } else if (dispatch.type == 'MESSAGE_DELETE_BULK') {
         if (this.settings.showDeletedCount) {
@@ -2853,7 +2856,7 @@ module.exports = class MessageLoggerV2 {
             continue;
           }
           this.saveDeletedMessage(purged, this.purgedMessageRecord);
-          if (this.currentChannel() && this.currentChannel().id === dispatch.channelId) ZeresPluginLibrary.DiscordModules.Dispatcher.dispatch({ type: 'MLV2_FORCE_UPDATE_MESSAGE', id: purged.id });
+          if (XenoLib.DiscordAPI.channelId === dispatch.channelId) ZeresPluginLibrary.DiscordModules.Dispatcher.dispatch({ type: 'MLV2_FORCE_UPDATE_MESSAGE', id: purged.id });
         }
 
         if (failedMessage && this.aggresiveMessageCaching)
@@ -3188,7 +3191,8 @@ module.exports = class MessageLoggerV2 {
           const oRef = ret.ref;
           ret.ref = e => {
             if (e && !e.__tooltip) {
-              new ZeresPluginLibrary.EmulatedTooltip(e, 'Deleted: ' + this.tools.createMomentObject(props.__MLV2_deleteTime).format('LLLL'), { side: 'left' });
+              // later
+              // new ZeresPluginLibrary.EmulatedTooltip(e, 'Deleted: ' + this.tools.createMomentObject(props.__MLV2_deleteTime).format('LLLL'), { side: 'left' });
               e.__tooltip = true;
             }
             if (typeof oRef === 'function') return oRef(e);
@@ -3200,7 +3204,7 @@ module.exports = class MessageLoggerV2 {
     this.forceReloadMessages();
   }
   forceReloadMessages() {
-    const instance = ZeresPluginLibrary.Utilities.findInTree(ZeresPluginLibrary.ReactTools.getReactInstance(document.querySelector('.chat-3bRxxu .content-yTz4x3')), e => e && e.constructor && e.constructor.displayName === 'ChannelChat', { walkable: ['child', 'stateNode'] });
+    const instance = ZeresPluginLibrary.Utilities.findInTree(ZeresPluginLibrary.ReactTools.getReactInstance(document.querySelector('.chat-2ZfjoI .content-1jQy2l')), e => e && e.constructor && e.constructor.displayName === 'ChannelChat', { walkable: ['child', 'stateNode'] });
     if (!instance) return;
     const unpatch = this.Patcher.after(instance, 'render', (_this, _, ret) => {
       unpatch();
@@ -3517,7 +3521,7 @@ module.exports = class MessageLoggerV2 {
         this.refilterMessages(); // I don't like calling that, maybe figure out a way to animate it collapsing on itself smoothly
         this.saveData();
       });
-      new ZeresPluginLibrary.EmulatedTooltip(timestampEl, 'Sent at ' + this.tools.createMomentObject(message.timestamp).format('LLLL'), { side: 'top' });
+      // new ZeresPluginLibrary.EmulatedTooltip(timestampEl, 'Sent at ' + this.tools.createMomentObject(message.timestamp).format('LLLL'), { side: 'top' });
     }
     const messageContext = e => {
       let target = e.target;
@@ -3717,7 +3721,7 @@ module.exports = class MessageLoggerV2 {
             const hist = record.edit_history[ii];
             const editedMarkup = this.formatMarkup(hist.content, message.channel_id);
             editedMarkup.insertAdjacentHTML('beforeend', `<time class="${this.multiClasses.edited}">(edited)</time>`); // TODO, change this
-            new ZeresPluginLibrary.EmulatedTooltip(editedMarkup, 'Edited at ' + (typeof hist.time === 'string' ? hist.time : this.createTimeStamp(hist.time)), { side: 'left' });
+            // new ZeresPluginLibrary.EmulatedTooltip(editedMarkup, 'Edited at ' + (typeof hist.time === 'string' ? hist.time : this.createTimeStamp(hist.time)), { side: 'left' });
             editedMarkup.classList.add(this.style.edited);
             editedMarkup.edit = ii;
             markup.appendChild(editedMarkup);
@@ -4180,7 +4184,7 @@ module.exports = class MessageLoggerV2 {
         red: false
       });
     });
-    new ZeresPluginLibrary.EmulatedTooltip(helpButton, 'Help!', { side: 'top' });
+    // new ZeresPluginLibrary.EmulatedTooltip(helpButton, 'Help!', { side: 'top' });
     return textBox;
   }
   // >>-|| MENU MODAL CREATION ||-<<
