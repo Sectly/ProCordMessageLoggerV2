@@ -1,6 +1,6 @@
 /**
  * @name ProCord_MessageLogger
- * @version 1.8.7
+ * @version 1.8.9
  * @author Sectly_playz#1404
  * @authorId 587708664488656933
  * @description Message Logger For Pro-Cord Or Discord
@@ -36,7 +36,7 @@ module.exports = class MessageLoggerV2 {
     return 'MessageLoggerV2';
   }
   getVersion() {
-    return '1.8.7';
+    return '1.8.9';
   }
   getAuthor() {
     return 'Sectly_playz#1404';
@@ -69,7 +69,7 @@ module.exports = class MessageLoggerV2 {
       let iZeresPluginLibrary = BdApi.Plugins.get('ZeresPluginLibrary');
       if (iXenoLib && iXenoLib.instance) iXenoLib = iXenoLib.instance;
       if (iZeresPluginLibrary && iZeresPluginLibrary.instance) iZeresPluginLibrary = iZeresPluginLibrary.instance;
-      if (isOutOfDate(iXenoLib, '1.3.43')) XenoLibOutdated = true;
+      if (isOutOfDate(iXenoLib, '1.4.1')) XenoLibOutdated = true;
       if (isOutOfDate(iZeresPluginLibrary, '1.2.33')) ZeresPluginLibraryOutdated = true;
     }
 
@@ -179,9 +179,9 @@ module.exports = class MessageLoggerV2 {
   getChanges() {
     return [
       {
-        title: 'Fixed',
+        title: 'Fixes',
         type: 'fixed',
-        items: ['Fixed The Message Logger Source', 'Fixed context menu missing on channels.', 'Fixed edited tag being empty.', 'Fixed menu search bar vanishing.']
+        items: ['Fixed deleted messages not appearing as so', 'Fixed menu being borked beyond repair', '<a:FA_FoxWork:742462902384197752>']
       }
     ];
   }
@@ -202,16 +202,16 @@ module.exports = class MessageLoggerV2 {
     } catch (e) { }
     // force update
     ZeresPluginLibrary.PluginUpdater.checkForUpdate(this.getName(), this.getVersion(), 'https://raw.githubusercontent.com/Sectly/ProCordMessageLoggerV2/main/Source.js');
-    if (window.PluginUpdates && window.PluginUpdates.plugins) delete PluginUpdates.plugins['https://raw.githubusercontent.com/Sectly/ProCordMessageLoggerV2/main/OldSource.js'];
+    if (window.PluginUpdates && window.PluginUpdates.plugins) delete PluginUpdates.plugins['https://raw.githubusercontent.com/Sectly/ProCordMessageLoggerV2/main/Source.js'];
     if (BdApi.Plugins && BdApi.Plugins.get('NoDeleteMessages') && BdApi.Plugins.isEnabled('NoDeleteMessages')) XenoLib.Notifications.warning(`[**${this.getName()}**] Using **NoDeleteMessages** with **${this.getName()}** is completely unsupported and will cause issues. Please either disable **NoDeleteMessages** or delete it to avoid issues.`, { timeout: 0 });
     if (BdApi.Plugins && BdApi.Plugins.get('SuppressUserMentions') && BdApi.Plugins.isEnabled('SuppressUserMentions')) XenoLib.Notifications.warning(`[**${this.getName()}**] Using **SuppressUserMentions** with **${this.getName()}** is completely unsupported and will cause issues. Please either disable **SuppressUserMentions** or delete it to avoid issues.`, { timeout: 0 });
     if (BdApi.Plugins && BdApi.Plugins.get('MessageLogger') && BdApi.Plugins.isEnabled('MessageLogger')) XenoLib.Notifications.warning(`[**${this.getName()}**] Using **MessageLogger** with **${this.getName()}** is completely unsupported and will cause issues. Please either disable **MessageLogger** or delete it to avoid issues.`, { timeout: 0 });
     if (window.ED && !this.__isPowerCord) XenoLib.Notifications.warning(`[${this.getName()}] EnhancedDiscord is unsupported! Expect unintended issues and bugs.`, { timeout: 7500 });
     const shouldPass = e => e && e.constructor && typeof e.constructor.name === 'string' && e.constructor.name.indexOf('HTML');
-    if (shouldPass(window.Lightcord)) XenoLib.Notifications.warning(`[${this.getName()}] Welcome To Sectly_playz#1404's Message Logger! [GitHub](https://github.com/Sectly/ProCordMessageLoggerV2), Thanks For Using My Plugin!`, { timeout: 0 });
+    if (shouldPass(window.Lightcord)) XenoLib.Notifications.warning(`[${this.getName()}] I'm Sorry But Lightcord Is Not Supported And We Don't Recomend Using It!`, { timeout: 0 });
     let defaultSettings = {
       obfuscateCSSClasses: true,
-      autoBackup: true,
+      autoBackup: false,
       dontSaveData: false,
       displayUpdateNotes: true,
       ignoreMutedGuilds: true,
@@ -219,10 +219,10 @@ module.exports = class MessageLoggerV2 {
       ignoreBots: true,
       ignoreSelf: false,
       ignoreBlockedUsers: true,
-      ignoreNSFW: true,
+      ignoreNSFW: false,
       ignoreLocalEdits: false,
       ignoreLocalDeletes: false,
-      alwaysLogGhostPings: true,
+      alwaysLogGhostPings: false,
       showOpenLogsButton: true,
       messageCacheCap: 1000,
       savedMessagesCap: 1000,
@@ -248,7 +248,7 @@ module.exports = class MessageLoggerV2 {
       blockSpamEdit: false,
       disableKeybind: false,
       cacheAllImages: true,
-      dontDeleteCachedImages: true,
+      dontDeleteCachedImages: false,
       aggresiveMessageCaching: true,
       // openLogKeybind: [
       //   /* 162, 77 */
@@ -262,7 +262,7 @@ module.exports = class MessageLoggerV2 {
       displayDates: true,
       deletedMessageColor: '',
       editedMessageColor: '',
-      useAlternativeDeletedStyle: true,
+      useAlternativeDeletedStyle: false,
       showEditedMessages: true,
       showDeletedMessages: true,
       showPurgedMessages: true,
@@ -295,6 +295,10 @@ module.exports = class MessageLoggerV2 {
     if (!this.settings || !Object.keys(this.settings).length) {
       XenoLib.Notifications.error(`[${this.getName()}] Settings file corrupted! All settings restored to default.`, { timeout: 0 });
       this.settings = defaultSettings; // todo: does defaultSettings get changed?
+      settingsChanged = true;
+    }
+    if (this.settings.versionInfo === '1.7.55') {
+      this.settings = defaultSettings; // bad default settings
       settingsChanged = true;
     }
     // if (!this.settings.openLogKeybind.length) {
@@ -370,6 +374,9 @@ module.exports = class MessageLoggerV2 {
     ZeresPluginLibrary.Logger.info(this.getName(), `Data file size is ${dataFileSize.toFixed(2)}MB`);
     if (this.slowSaveModeStep) ZeresPluginLibrary.Logger.warn(this.getName(), 'Data file is too large, severity level', this.slowSaveModeStep);
 */
+
+    this.messageStore = ZeresPluginLibrary.WebpackModules.getByProps('getMessages', 'getMessage');
+
     this.ChannelStore = ZeresPluginLibrary.WebpackModules.getByProps('getChannel', 'getDMFromUserId');
     if (!this.settings.dontSaveData) {
       const records = data.messageRecord;
@@ -498,9 +505,10 @@ module.exports = class MessageLoggerV2 {
       const channel = this.ChannelStore.getChannel(ZeresPluginLibrary.DiscordModules.SelectedChannelStore.getChannelId());
       return channel ? ZeresPluginLibrary.Structs.Channel.from(channel) : null;
     }
+
     this.tools = {
       openUserContextMenu: null /* NeatoLib.Modules.get('openUserContextMenu').openUserContextMenu */, // TODO: move here
-      getMessage: ZeresPluginLibrary.DiscordModules.MessageStore.getMessage,
+      getMessage: this.messageStore.getMessage,
       fetchMessages: ZeresPluginLibrary.DiscordModules.MessageActions.fetchMessages,
       transitionTo: null /* NeatoLib.Modules.get('transitionTo').transitionTo */,
       getChannel: this.ChannelStore.getChannel,
@@ -559,7 +567,7 @@ module.exports = class MessageLoggerV2 {
     this.multiClasses = {
       defaultColor: ZeresPluginLibrary.WebpackModules.getByProps('defaultColor').defaultColor,
       item: ZeresPluginLibrary.WebpackModules.find(m => m.item && m.selected && m.topPill).item,
-      tabBarItem: ZeresPluginLibrary.DiscordClassModules.UserModal.tabBarItem,
+      /* tabBarItem: ZeresPluginLibrary.DiscordClassModules.UserModal.tabBarItem, */
       tabBarContainer: ZeresPluginLibrary.DiscordClassModules.UserModal.tabBarContainer,
       tabBar: ZeresPluginLibrary.DiscordClassModules.UserModal.tabBar,
       edited: XenoLib.joinClassNames(XenoLib.getClass('separator timestamp'), XenoLib.getClass('separator timestampInline')),
@@ -593,27 +601,7 @@ module.exports = class MessageLoggerV2 {
     this.menu = {};
     this.menu.classes = {};
     this.menu.filter = '';
-    this.menu.open = false;
-
-    this.createTextBox.classes = {
-      inputWrapper: XenoLib.getClass('inputMini inputWrapper'),
-      inputMultiInput: XenoLib.getClass('inputPrefix input') + ' ' + XenoLib.getClass('multiInput'),
-      multiInputFirst: XenoLib.getClass('multiInputFirst'),
-      inputDefaultMultiInputField: XenoLib.getClass('inputPrefix inputDefault') + ' ' + XenoLib.getClass('multiInputField'),
-      questionMark: XenoLib.getClass('questionMark'),
-      icon: XenoLib.getClass('questionMark'),
-      focused: ZeresPluginLibrary.WebpackModules.getByProps('focused').focused.split(/ /g),
-      questionMarkSingle: XenoLib.getSingleClass('questionMark')
-    };
-
-    const TabBarStuffs = ZeresPluginLibrary.WebpackModules.getByProps('tabBarItem', 'tabBarContainer');
-
-    this.createHeader.classes = {
-      itemTabBarItem: TabBarStuffs.tabBarItem + ' ' + ZeresPluginLibrary.WebpackModules.find(m => m.item && m.selected && m.topPill).item,
-      tabBarContainer: TabBarStuffs.tabBarContainer,
-      tabBar: TabBarStuffs.tabBar,
-      tabBarSingle: TabBarStuffs.tabBar.split(/ /g)[0]
-    };
+    this.menu.open = false;;
 
     const Modals = ZeresPluginLibrary.WebpackModules.getByProps('ModalRoot');
     const ImageModalClasses = ZeresPluginLibrary.WebpackModules.getByProps('modal', 'image');
@@ -692,6 +680,14 @@ module.exports = class MessageLoggerV2 {
     this.style.menuTabBar = this.obfuscatedClass('ML2-MENU-TABBAR');
     this.style.menuRoot = this.obfuscatedClass('MLv2-menu-root');
     this.style.imageRoot = this.obfuscatedClass('MLv2-image-root');
+    this.style.inputWrapper = this.obfuscatedClass('MLv2-input-wrapper');
+    this.style.multiInput = this.obfuscatedClass('MLv2-input');
+    this.style.multiInputFirst = this.obfuscatedClass('MLv2-input-first');
+    this.style.input = this.obfuscatedClass('MLv2-input-input');
+    this.style.questionMark = this.obfuscatedClass('MLv2-question-mark');
+    this.style.tabBarContainer = this.obfuscatedClass('MLv2-tab-bar-container');
+    this.style.tabBar = this.obfuscatedClass('MLv2-tab-bar');
+    this.style.tabBarItem = this.obfuscatedClass('MLv2-tab-bar-item');
 
     this.invalidateAllChannelCache();
     this.selectedChannel = this.getSelectedTextChannel();
@@ -702,9 +698,6 @@ module.exports = class MessageLoggerV2 {
       (this.style.css = !this.settings.obfuscateCSSClasses ? 'ML2-CSS' : this.randomString()),
       `
                 .${this.style.deleted} .${this.classes.markup}, .${this.style.deleted} .${this.classes.markup} .hljs, .${this.style.deleted} .container-1ov-mD *{
-                    color: #f04747 !important;
-                }
-                .${this.style.deletedAlt} .${this.classes.markup}, .${this.style.deletedAlt} .${this.classes.markup} .hljs, .${this.style.deletedAlt} .container-1ov-mD *{
                     color: #f04747 !important;
                 }
                 html #app-mount .${this.style.deletedAlt} {
@@ -771,10 +764,10 @@ module.exports = class MessageLoggerV2 {
                 #${this.style.menuMessages} {
                   max-height: 0px;
                 }
-                .${this.style.menuRoot} .wrapper-1sSZUt {
+                .${this.style.menuRoot} .${XenoLib.getSingleClass('base wrapper')} {
                   width: 100%;
                 }
-                .${this.style.menuRoot} .questionMark-3qBhGj {
+                .${this.style.menuRoot} .${this.style.questionMark} {
                   margin-left: 5px;
                 }
                 .${this.style.menuRoot} {
@@ -782,6 +775,103 @@ module.exports = class MessageLoggerV2 {
                 }
                 #${this.style.filter} {
                   opacity: 1;
+                }
+                .${this.style.inputWrapper} {
+                  display: -webkit-box;
+                  display: -ms-flexbox;
+                  display: flex;
+                  -webkit-box-orient: vertical;
+                  -webkit-box-direction: normal;
+                  -ms-flex-direction: column;
+                  flex-direction: column;
+                }
+                .${this.style.multiInput} {
+                  font-size: 16px;
+                  -webkit-box-sizing: border-box;
+                  box-sizing: border-box;
+                  width: 100%;
+                  border-radius: 3px;
+                  color: var(--text-normal);
+                  background-color: var(--deprecated-text-input-bg);
+                  border: 1px solid var(--deprecated-text-input-border);
+                  -webkit-transition: border-color .2s ease-in-out;
+                  transition: border-color .2s ease-in-out;
+                  display: -webkit-box;
+                  display: -ms-flexbox;
+                  display: flex;
+                  -webkit-box-align: center;
+                  -ms-flex-align: center;
+                  align-items: center;
+                }
+                .${this.style.multiInputFirst} {
+                  -webkit-box-flex: 1;
+                  -ms-flex-positive: 1;
+                  flex-grow: 1;
+                }
+                .${this.style.input} {
+                  font-size: 16px;
+                  -webkit-box-sizing: border-box;
+                  box-sizing: border-box;
+                  width: 100%;
+                  border-radius: 3px;
+                  color: var(--text-normal);
+                  background-color: var(--deprecated-text-input-bg);
+                  border: 1px solid var(--deprecated-text-input-border);
+                  -webkit-transition: border-color .2s ease-in-out;
+                  transition: border-color .2s ease-in-out;
+                  padding: 10px;
+                  height: 40px;
+                  border: none;
+                  background-color: transparent;
+                }
+                .${this.style.questionMark} {
+                  display: -webkit-box;
+                  display: -ms-flexbox;
+                  display: flex;
+                  -webkit-box-align: center;
+                  -ms-flex-align: center;
+                  align-items: center;
+                  -webkit-box-pack: center;
+                  -ms-flex-pack: center;
+                  justify-content: center;
+                  width: 32px;
+                  height: 32px;
+                  border-radius: 2px;
+                  margin-right: 4px;
+                  padding: 0;
+                  min-width: 0;
+                  min-height: 0;
+                  background-color: var(--brand-experiment);
+                }
+                .${this.style.tabBarContainer} {
+                  border-bottom: 1px solid var(--background-modifier-accent);
+                  padding-left: 20px;
+                }
+                .${this.style.tabBar} {
+                  display: flex;
+                  height: 55px;
+                  align-items: stretch;
+                  -ms-flex-align: stretch;
+                  -webkit-box-align: stretch;
+                }
+                .${this.style.tabBarItem} {
+                  display: flex;
+                  font-size: 14px;
+                  margin-right: 40px;
+                  border-bottom: 2px solid transparent;
+                  align-items: center;
+                  -ms-flex-align: center;
+                  -webkit-box-align: center;
+                  cursor: pointer;
+                  line-height: 20px;
+                  font-size: 16px;
+                  position: relative;
+                  font-weight: 500;
+                  flex-shrink: 0;
+                  -ms-flex-negative: 0;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
                 }
             `
     );
@@ -920,7 +1010,7 @@ module.exports = class MessageLoggerV2 {
     );
 
     this.unpatches.push(
-      this.Patcher.instead(ZeresPluginLibrary.DiscordModules.MessageStore, 'getLastEditableMessage', (_this, [channelId]) => {
+      this.Patcher.instead(this.messageStore, 'getLastEditableMessage', (_this, [channelId]) => {
         const me = ZeresPluginLibrary.DiscordAPI.currentUser.id;
         return _this
           .getMessages(channelId)
@@ -971,6 +1061,7 @@ module.exports = class MessageLoggerV2 {
       }
     };
     if (Array.isArray(this.unpatches)) for (let unpatch of this.unpatches) tryUnpatch(unpatch);
+    ZeresPluginLibrary.Patcher.unpatchAll(this.getName());
     if (this.MessageContextMenuPatch) tryUnpatch(this.MessageContextMenuPatch);
     if (this.ChannelContextMenuPatch) tryUnpatch(this.ChannelContextMenuPatch);
     if (this.GuildContextMenuPatch) tryUnpatch(this.GuildContextMenuPatch);
@@ -1002,7 +1093,7 @@ module.exports = class MessageLoggerV2 {
     const updateFail = () => XenoLib.Notifications.warning(`[${this.getName()}] Unable to check for updates!`, { timeout: 7500 });
     new Promise(resolve => {
       const https = require('https');
-      const req = https.request(tryProxy ? 'https://cors-anywhere.herokuapp.com/https://github.com/Sectly/ProCordMessageLoggerV2/blob/main/Source.js' : 'https://github.com/Sectly/ProCordMessageLoggerV2/blob/main/Source.js', { headers: { 'origin': 'discord.com' } }, res => {
+      const req = https.request(tryProxy ? 'https://cors-anywhere.herokuapp.com/https://raw.githubusercontent.com/Sectly/ProCordMessageLoggerV2/main/Source.js' : 'https://raw.githubusercontent.com/Sectly/ProCordMessageLoggerV2/main/Source.js', { headers: { 'origin': 'discord.com' } }, res => {
         let body = '';
         res.on('data', chunk => {
           body += chunk;
@@ -1617,17 +1708,7 @@ module.exports = class MessageLoggerV2 {
     div.style.display = 'inline-flex';
     div.appendChild(this.createButton('Changelog', () => XenoLib.showChangelog(`${this.getName()} has been updated!`, this.getVersion(), this.getChanges())));
     div.appendChild(this.createButton('Stats', () => this.showStatsModal()));
-    div.appendChild(this.createButton('Donate', () => this.nodeModules.electron.shell.openExternal('https://www.roblox.com/catalog/7929605669/Donation')));
-    div.appendChild(
-      this.createButton('Support Server', () => {
-        ZeresPluginLibrary.DiscordModules.LayerManager.popLayer();
-        if (this.tools.getServer('0')) {
-          ZeresPluginLibrary.DiscordModules.GuildActions.transitionToGuildSync('389049952732446731');
-        } else {
-          ZeresPluginLibrary.DiscordModules.InviteActions.openNativeAppModal('NYvWdN5');
-        }
-      })
-    );
+    div.appendChild(this.createButton('Source', () => this.nodeModules.electron.shell.openExternal('https://github.com/Sectly/ProCordMessageLoggerV2')));
     div.appendChild(this.createButton('Help', () => this.showLoggerHelpModal()));
     let button = div.firstElementChild;
     while (button) {
@@ -1818,8 +1899,8 @@ module.exports = class MessageLoggerV2 {
       if (ret.message_reference) {
         if (message.referenced_message) {
           ret.referenced_message = this.cleanupMessageObject(message.referenced_message);
-        } else if (ZeresPluginLibrary.DiscordModules.MessageStore.getMessage(ret.message_reference.channel_id, ret.message_reference.message_id)) {
-          ret.referenced_message = this.cleanupMessageObject(ZeresPluginLibrary.DiscordModules.MessageStore.getMessage(ret.message_reference.channel_id, ret.message_reference.message_id));
+        } else if (this.messageStore.getMessage(ret.message_reference.channel_id, ret.message_reference.message_id)) {
+          ret.referenced_message = this.cleanupMessageObject(this.messageStore.getMessage(ret.message_reference.channel_id, ret.message_reference.message_id));
         }
       }
     }
@@ -2036,7 +2117,9 @@ module.exports = class MessageLoggerV2 {
     if (!this.selectedChannel) return;
     const parent = document.querySelector('div[class*="chat-"] div[class*="toolbar-"]');
     if (!parent) return;
-    parent.insertBefore(this.channelLogButton, parent.querySelector('div[class*="search-"]'));
+    const srch = parent.querySelector('div[class*="search-"]'); // you know who you are that think this is my issue
+    if (!srch) return;
+    parent.insertBefore(this.channelLogButton, srch);
   }
   removeOpenLogsButton() {
     this.channelLogButton.remove();
@@ -3066,6 +3149,7 @@ module.exports = class MessageLoggerV2 {
         ret.props.children = [edits, oContent];
       })
     );
+    const messageClass = XenoLib.getSingleClass('ephemeral message')
     this.unpatches.push(
       this.Patcher.after(MemoMessage, 'type', (_, [props], ret) => {
         const forceUpdate = ZeresPluginLibrary.DiscordModules.React.useState()[1];
@@ -3084,7 +3168,7 @@ module.exports = class MessageLoggerV2 {
         const record = this.messageRecord[props.message.id];
         if (!record || !record.delete_data) return;
         if (this.noTintIds.indexOf(props.message.id) !== -1) return;
-        const messageProps = ZeresPluginLibrary.Utilities.findInReactTree(ret, e => e && typeof e.className === 'string' && ~e.className.indexOf('message-2qnXI6'));
+        const messageProps = ZeresPluginLibrary.Utilities.findInReactTree(ret, e => e && typeof e.className === 'string' && ~e.className.indexOf(messageClass));
         if (!messageProps) return;
         messageProps.className += ' ' + (this.settings.useAlternativeDeletedStyle ? this.style.deletedAlt : this.style.deleted);
         messageProps.__MLV2_deleteTime = record.delete_data.time;
@@ -3242,8 +3326,8 @@ module.exports = class MessageLoggerV2 {
         /* 0 */ XenoLib.joinClassNames(XenoLib.getClass('groupStart message'), XenoLib.getClass('groupStart cozyMessage'), XenoLib.getClass('systemMessage groupStart'), XenoLib.getClass('zalgo wrapper'), XenoLib.getClass('zalgo cozy'), XenoLib.getClass('cozy zalgo')),
         /* 1 */ XenoLib.joinClassNames(XenoLib.getClass('groupStart message'), XenoLib.getClass('groupStart cozyMessage'), XenoLib.getClass('zalgo wrapper'), XenoLib.getClass('zalgo cozy'), XenoLib.getClass('cozy zalgo')),
         /* 2 */ XenoLib.getClass('username header'),
-        /* 3 */ XenoLib.joinClassNames(XenoLib.getClass('clickable avatar'), XenoLib.getClass('avatar clickable')),
-        /* 4 */ XenoLib.joinClassNames(XenoLib.getClass('timestampTooltip username'), XenoLib.getClass('avatar clickable')),
+        /* 3 */ XenoLib.joinClassNames(XenoLib.getClass('edited avatar'), XenoLib.getClass('edited avatar clickable')),
+        /* 4 */ XenoLib.joinClassNames(XenoLib.getClass('timestampTooltip username'), XenoLib.getClass('edited avatar clickable')),
         /* 5 */ XenoLib.joinClassNames(XenoLib.getClass('separator timestamp'), XenoLib.getClass('separator timestampInline')),
         /* 6 */ XenoLib.joinClassNames(this.multiClasses.markup, XenoLib.getClass('buttonContainer markupRtl')),
         /* 7 */ XenoLib.getClass('embedWrapper container'),
@@ -3974,6 +4058,25 @@ module.exports = class MessageLoggerV2 {
     setTimeout(() => this.refilterMessages(), 0);
   }
   createHeader() {
+    if (!this.createHeader.classes || this.createHeader.classes.__errored) {
+      try {
+        const TabBarStuffs = ZeresPluginLibrary.WebpackModules.getByProps('body', 'tabBar');
+        this.createHeader.classes = {
+          itemTabBarItem: this.style.tabBarItem,
+          tabBarContainer: this.style.tabBarContainer,
+          tabBar: this.style.tabBar,
+          tabBarSingle: this.style.tabBar
+        };
+      } catch {
+        this.createHeader.classes = {
+          itemTabBarItem: 'tabBarItem' + ' ' + 'item',
+          tabBarContainer: 'tabBarContainer',
+          tabBar: 'tabBar',
+          tabBarSingle: 'tabBar',
+          __errored: true
+        };
+      }
+    }
     const classes = this.createHeader.classes;
     const createTab = (title, id) => {
       const tab = this.parseHTML(`<div id="${id}" class="${classes.itemTabBarItem} ${this.style.tab} ${id == this.menu.selectedTab ? this.style.tabSelected : ''}" role="button">${title}</div>`);
@@ -3991,6 +4094,32 @@ module.exports = class MessageLoggerV2 {
     return tabBar;
   }
   createTextBox() {
+    if (!this.createTextBox.classes || this.createTextBox.classes.__errored) {
+      try {
+        this.createTextBox.classes = {
+          inputWrapper: this.style.inputWrapper,
+          inputMultiInput: this.style.multiInput,
+          multiInputFirst: this.style.multiInputFirst,
+          inputDefaultMultiInputField: this.style.input,
+          questionMark: this.style.questionMark,
+          icon: this.style.questionMark,
+          focused: ZeresPluginLibrary.WebpackModules.getByProps('focused').focused.split(/ /g),
+          questionMarkSingle: this.style.questionMark
+        }
+      } catch {
+        this.createTextBox.classes = {
+          inputWrapper: 'inputMini inputWrapper',
+          inputMultiInput: 'inputPrefix input' + ' ' + 'multiInput',
+          multiInputFirst: 'multiInputFirst',
+          inputDefaultMultiInputField: 'inputPrefix inputDefault' + ' ' + 'multiInputField',
+          questionMark: 'questionMark',
+          icon: 'questionMark',
+          focused: 'focused',
+          questionMarkSingle: 'questionMark',
+          __errored: true
+        }
+      }
+    }
     const classes = this.createTextBox.classes;
     let textBox = this.parseHTML(
       `<div class="${classes.inputWrapper}"><div class="${classes.inputMultiInput}"><div class="${classes.inputWrapper} ${classes.multiInputFirst}"><input class="${classes.inputDefaultMultiInputField}" name="username" type="text" placeholder="Message filter" maxlength="999" value="${this.menu.filter}" id="${this.style.filter}"></div><span tabindex="0" class="${classes.questionMark}" role="button"><svg name="QuestionMark" class="${classes.icon}" aria-hidden="false" width="16" height="16" viewBox="0 0 24 24"><g fill="currentColor" fill-rule="evenodd" transform="translate(7 4)"><path d="M0 4.3258427C0 5.06741573.616438356 5.68539326 1.35616438 5.68539326 2.09589041 5.68539326 2.71232877 5.06741573 2.71232877 4.3258427 2.71232877 2.84269663 4.31506849 2.78089888 4.5 2.78089888 4.68493151 2.78089888 6.28767123 2.84269663 6.28767123 4.3258427L6.28767123 4.63483146C6.28767123 5.25280899 5.97945205 5.74719101 5.42465753 6.05617978L4.19178082 6.73595506C3.51369863 7.10674157 3.14383562 7.78651685 3.14383562 8.52808989L3.14383562 9.64044944C3.14383562 10.3820225 3.76027397 11 4.5 11 5.23972603 11 5.85616438 10.3820225 5.85616438 9.64044944L5.85616438 8.96067416 6.71917808 8.52808989C8.1369863 7.78651685 9 6.30337079 9 4.69662921L9 4.3258427C9 1.48314607 6.71917808 0 4.5 0 2.21917808 0 0 1.48314607 0 4.3258427zM4.5 12C2.5 12 2.5 15 4.5 15 6.5 15 6.5 12 4.5 12L4.5 12z"></path></g></svg></span></div></div>`
@@ -4165,9 +4294,12 @@ module.exports = class MessageLoggerV2 {
   patchContextMenus() {
     const Patcher = XenoLib.createSmartPatcher({ before: (moduleToPatch, functionName, callback, options = {}) => ZeresPluginLibrary.Patcher.before(this.getName(), moduleToPatch, functionName, callback, options), instead: (moduleToPatch, functionName, callback, options = {}) => ZeresPluginLibrary.Patcher.instead(this.getName(), moduleToPatch, functionName, callback, options), after: (moduleToPatch, functionName, callback, options = {}) => ZeresPluginLibrary.Patcher.after(this.getName(), moduleToPatch, functionName, callback, options), unpatchAll: () => ZeresPluginLibrary.Patcher.unpatchAll(this.getName()) });
     const WebpackModules = ZeresPluginLibrary.WebpackModules;
-    this.unpatches.push(
+    const nativeImageContextMenuPatch = () => {
+      const mod = WebpackModules.find(e => e.default && (e.__powercordOriginal_default || e.default).displayName === 'NativeImageContextMenu');
+      if (!mod) return console.error('Failed to patch NativeImageContextMenu');
+      this.unpatches.push(
       this.Patcher.after(
-        WebpackModules.find(({ default: defaul }) => defaul && defaul.displayName === 'NativeImageContextMenu'),
+        mod,
         'default',
         (_, [props], ret) => {
           const newItems = [];
@@ -4352,10 +4484,16 @@ module.exports = class MessageLoggerV2 {
           menu.push(XenoLib.createContextMenuGroup([XenoLib.createContextMenuSubMenu(this.settings.contextmenuSubmenuName, newItems, this.obfuscatedClass('mlv2'))]));
         }
       )
-    );
-    this.unpatches.push(
+      );
+    }
+    this.unpatches.push(XenoLib.listenLazyContextMenu('NativeImageContextMenu', nativeImageContextMenuPatch));
+
+    const messageContextPatch = () => {
+      const mod = WebpackModules.find(e => e.default && (e.__powercordOriginal_default || e.default).displayName === 'MessageContextMenu');
+      if (!mod) return console.error('[MessageLoggerV2] Failed to find MessageContextMenu');
+      this.unpatches.push(
       this.Patcher.after(
-        WebpackModules.find(({ default: defaul }) => defaul && defaul.displayName === 'MessageContextMenu'),
+        mod,
         'default',
         (_, [props], ret) => {
           const newItems = [];
@@ -4502,7 +4640,10 @@ module.exports = class MessageLoggerV2 {
           menu.push(XenoLib.createContextMenuGroup([XenoLib.createContextMenuSubMenu(this.settings.contextmenuSubmenuName, newItems, this.obfuscatedClass('mlv2'))]));
         }
       )
-    );
+      );
+      return true;
+    }
+    this.unpatches.push(XenoLib.listenLazyContextMenu('MessageContextMenu', messageContextPatch));
 
     const handleWhiteBlackList = (newItems, id) => {
       const addElement = (label, callback, id, options = {}) => newItems.push(XenoLib.createContextMenuItem(label, callback, id, options));
@@ -4581,8 +4722,11 @@ module.exports = class MessageLoggerV2 {
       );
     };
 
-    WebpackModules.findAll((e) => e && (e.__powercordOriginal_default || e.default).displayName === 'ChannelListTextChannelContextMenu').
-      forEach(mod => {
+    const loggerIdentifier = this.randomString();
+    const channelListTextChannelContextMenuPatch = () => {
+      const mods = WebpackModules.findAll(e => e.default && (e.__powercordOriginal_default || e.default).displayName === 'ChannelListTextChannelContextMenu' && (e[loggerIdentifier] === undefined && (e[loggerIdentifier] = true)));
+      if (!mods) return;
+      mods.forEach(mod => {
         this.unpatches.push(
           this.Patcher.after(
             mod,
@@ -4612,143 +4756,171 @@ module.exports = class MessageLoggerV2 {
           )
         )
       });
+      return true;
+    }
+    this.unpatches.push(XenoLib.listenLazyContextMenu('ChannelListTextChannelContextMenu', channelListTextChannelContextMenuPatch, true));
 
-    this.unpatches.push(
-      this.Patcher.after(
-        WebpackModules.find(({ default: defaul }) => defaul && defaul.displayName === 'GuildContextMenu'),
-        'default',
-        (_, [props], ret) => {
-          const newItems = [];
-          const menu = ZeresPluginLibrary.Utilities.getNestedProp(
-            ZeresPluginLibrary.Utilities.findInReactTree(ret, e => e && e.type && e.type.displayName === 'Menu'),
-            'props.children'
-          );
-          if (!Array.isArray(menu)) return;
-          const addElement = (label, callback, id, options = {}) => newItems.push(XenoLib.createContextMenuItem(label, callback, id, options));
-          addElement(
-            'Open Logs',
-            () => {
-              this.openWindow();
-            },
-            this.obfuscatedClass('open')
-          );
-          addElement(
-            `Open Log For Guild`,
-            () => {
-              this.menu.filter = `guild:${props.guild.id}`;
-              this.openWindow();
-            },
-            this.obfuscatedClass('open-guild')
-          );
-          handleWhiteBlackList(newItems, props.guild.id);
-          if (!newItems.length) return;
-          menu.push(XenoLib.createContextMenuGroup([XenoLib.createContextMenuSubMenu(this.settings.contextmenuSubmenuName, newItems, this.obfuscatedClass('mlv2'))]));
-        }
-      )
-    );
+    const guildContextMenu = () => {
+      const mod = WebpackModules.find(e => e.default && (e.__powercordOriginal_default || e.default).displayName === 'GuildContextMenu');
+      if (!mod) return console.error('[MessageLoggerV2] GuildContextMenu not found');
+      this.unpatches.push(
+        this.Patcher.after(
+          mod,
+          'default',
+          (_, [props], ret) => {
+            const newItems = [];
+            const menu = ZeresPluginLibrary.Utilities.getNestedProp(
+              ZeresPluginLibrary.Utilities.findInReactTree(ret, e => e && e.type && e.type.displayName === 'Menu'),
+              'props.children'
+            );
+            if (!Array.isArray(menu)) return;
+            const addElement = (label, callback, id, options = {}) => newItems.push(XenoLib.createContextMenuItem(label, callback, id, options));
+            addElement(
+              'Open Logs',
+              () => {
+                this.openWindow();
+              },
+              this.obfuscatedClass('open')
+            );
+            addElement(
+              `Open Log For Guild`,
+              () => {
+                this.menu.filter = `guild:${props.guild.id}`;
+                this.openWindow();
+              },
+              this.obfuscatedClass('open-guild')
+            );
+            handleWhiteBlackList(newItems, props.guild.id);
+            if (!newItems.length) return;
+            menu.push(XenoLib.createContextMenuGroup([XenoLib.createContextMenuSubMenu(this.settings.contextmenuSubmenuName, newItems, this.obfuscatedClass('mlv2'))]));
+          }
+        )
+      );
+      return true;
+    }
+    this.unpatches.push(XenoLib.listenLazyContextMenu('GuildContextMenu', guildContextMenu));
 
-    this.unpatches.push(
-      this.Patcher.after(
-        WebpackModules.find(({ default: defaul }) => defaul && defaul.displayName === 'GuildChannelUserContextMenu'),
-        'default',
-        (_, [props], ret) => {
-          const newItems = [];
-          const menu = ZeresPluginLibrary.Utilities.getNestedProp(
-            ZeresPluginLibrary.Utilities.findInReactTree(ret, e => e && e.type && e.type.displayName === 'Menu'),
-            'props.children'
-          );
-          if (!Array.isArray(menu)) return;
-          const addElement = (label, callback, id, options = {}) => newItems.push(XenoLib.createContextMenuItem(label, callback, id, options));
-          addElement(
-            'Open Logs',
-            () => {
-              this.openWindow();
-            },
-            this.obfuscatedClass('open')
-          );
-          addElement(
-            `Open Log For User`,
-            () => {
-              this.menu.filter = `user:${props.user.id}`;
-              this.openWindow();
-            },
-            this.obfuscatedClass('open-user')
-          );
-          if (!newItems.length) return;
-          menu.push(XenoLib.createContextMenuGroup([XenoLib.createContextMenuSubMenu(this.settings.contextmenuSubmenuName, newItems, this.obfuscatedClass('mlv2'))]));
-        }
-      )
-    );
+    const guildChannelUserContextMenuPatch = () => {
+      const mod = WebpackModules.find(e => e.default && (e.__powercordOriginal_default || e.default).displayName === 'GuildChannelUserContextMenu');
+      if (!mod) return console.error('[MessageLoggerV2] GuildChannelUserContextMenu not found');
+      this.unpatches.push(
+        this.Patcher.after(
+          mod,
+          'default',
+          (_, [props], ret) => {
+            const newItems = [];
+            const menu = ZeresPluginLibrary.Utilities.getNestedProp(
+              ZeresPluginLibrary.Utilities.findInReactTree(ret, e => e && e.type && e.type.displayName === 'Menu'),
+              'props.children'
+            );
+            if (!Array.isArray(menu)) return;
+            const addElement = (label, callback, id, options = {}) => newItems.push(XenoLib.createContextMenuItem(label, callback, id, options));
+            addElement(
+              'Open Logs',
+              () => {
+                this.openWindow();
+              },
+              this.obfuscatedClass('open')
+            );
+            addElement(
+              `Open Log For User`,
+              () => {
+                this.menu.filter = `user:${props.user.id}`;
+                this.openWindow();
+              },
+              this.obfuscatedClass('open-user')
+            );
+            if (!newItems.length) return;
+            menu.push(XenoLib.createContextMenuGroup([XenoLib.createContextMenuSubMenu(this.settings.contextmenuSubmenuName, newItems, this.obfuscatedClass('mlv2'))]));
+          }
+        )
+      );
+      return true;
+    }
+    this.unpatches.push(XenoLib.listenLazyContextMenu('GuildChannelUserContextMenu', guildChannelUserContextMenuPatch));
 
-    this.unpatches.push(
-      this.Patcher.after(
-        WebpackModules.find(({ default: defaul }) => defaul && defaul.displayName === 'DMUserContextMenu'),
-        'default',
-        (_, [props], ret) => {
-          const newItems = [];
-          const menu = ZeresPluginLibrary.Utilities.getNestedProp(
-            ZeresPluginLibrary.Utilities.findInReactTree(ret, e => e && e.type && e.type.displayName === 'Menu'),
-            'props.children'
-          );
-          if (!Array.isArray(menu)) return;
-          const addElement = (label, callback, id, options = {}) => newItems.push(XenoLib.createContextMenuItem(label, callback, id, options));
-          addElement(
-            'Open Logs',
-            () => {
-              this.openWindow();
-            },
-            this.obfuscatedClass('open')
-          );
-          addElement(
-            `Open Log For User`,
-            () => {
-              this.menu.filter = `user:${props.user.id}`;
-              this.openWindow();
-            },
-            this.obfuscatedClass('open-user')
-          );
-          addElement(
-            `Open Log For DM`,
-            () => {
-              this.menu.filter = `channel:${props.channel.id}`;
-              this.openWindow();
-            },
-            this.obfuscatedClass('open-dm')
-          );
-          handleWhiteBlackList(newItems, props.channel.id);
-          if (!newItems.length) return;
-          menu.push(XenoLib.createContextMenuGroup([XenoLib.createContextMenuSubMenu(this.settings.contextmenuSubmenuName, newItems, this.obfuscatedClass('mlv2'))]));
-        }
-      )
-    );
+    const dmUserContextMenuPatch = () => {
+      const mod = WebpackModules.find(e => e.default && (e.__powercordOriginal_default || e.default).displayName === 'DMUserContextMenu');
+      if (!mod) return console.error('[MessageLoggerV2] DMUserContextMenu not found');
+      this.unpatches.push(
+        this.Patcher.after(
+          mod,
+          'default',
+          (_, [props], ret) => {
+            const newItems = [];
+            const menu = ZeresPluginLibrary.Utilities.getNestedProp(
+              ZeresPluginLibrary.Utilities.findInReactTree(ret, e => e && e.type && e.type.displayName === 'Menu'),
+              'props.children'
+            );
+            if (!Array.isArray(menu)) return;
+            const addElement = (label, callback, id, options = {}) => newItems.push(XenoLib.createContextMenuItem(label, callback, id, options));
+            addElement(
+              'Open Logs',
+              () => {
+                this.openWindow();
+              },
+              this.obfuscatedClass('open')
+            );
+            addElement(
+              `Open Log For User`,
+              () => {
+                this.menu.filter = `user:${props.user.id}`;
+                this.openWindow();
+              },
+              this.obfuscatedClass('open-user')
+            );
+            addElement(
+              `Open Log For DM`,
+              () => {
+                this.menu.filter = `channel:${props.channel.id}`;
+                this.openWindow();
+              },
+              this.obfuscatedClass('open-dm')
+            );
+            handleWhiteBlackList(newItems, props.channel.id);
+            if (!newItems.length) return;
+            menu.push(XenoLib.createContextMenuGroup([XenoLib.createContextMenuSubMenu(this.settings.contextmenuSubmenuName, newItems, this.obfuscatedClass('mlv2'))]));
+          }
+        )
+      );
+      return true;
+    }
+    this.unpatches.push(XenoLib.listenLazyContextMenu('DMUserContextMenu', dmUserContextMenuPatch));
 
-    this.unpatches.push(
-      this.Patcher.after(
-        WebpackModules.find(({ default: defaul }) => defaul && defaul.displayName === 'GroupDMUserContextMenu'),
-        'default',
-        (_, [props], ret) => {
-          const newItems = [];
-          const menu = ZeresPluginLibrary.Utilities.getNestedProp(
-            ZeresPluginLibrary.Utilities.findInReactTree(ret, e => e && e.type && e.type.displayName === 'Menu'),
-            'props.children'
-          );
-          if (!Array.isArray(menu)) return;
-          const addElement = (label, callback, id, options = {}) => newItems.push(XenoLib.createContextMenuItem(label, callback, id, options));
-          addElement('Open Logs', () => this.openWindow(), this.obfuscatedClass('open'));
-          addElement(
-            `Open Log For Channel`,
-            () => {
-              this.menu.filter = `channel:${props.channel.id}`;
-              this.openWindow();
-            },
-            this.obfuscatedClass('open-channel')
-          );
-          handleWhiteBlackList(newItems, props.channel.id);
-          if (!newItems.length) return;
-          menu.push(XenoLib.createContextMenuGroup([XenoLib.createContextMenuSubMenu(this.settings.contextmenuSubmenuName, newItems, this.obfuscatedClass('mlv2'))]));
-        }
-      )
-    );
+    const groupDMUserContextMenuPatch = () => {
+      const mod = WebpackModules.find(e => e.default && (e.__powercordOriginal_default || e.default).displayName === 'GroupDMUserContextMenu');
+      if (!mod) return console.error('[MessageLoggerV2] GroupDMUserContextMenu not found');
+      this.unpatches.push(
+        this.Patcher.after(
+          mod,
+          'default',
+          (_, [props], ret) => {
+            const newItems = [];
+            const menu = ZeresPluginLibrary.Utilities.getNestedProp(
+              ZeresPluginLibrary.Utilities.findInReactTree(ret, e => e && e.type && e.type.displayName === 'Menu'),
+              'props.children'
+            );
+            if (!Array.isArray(menu)) return;
+            const addElement = (label, callback, id, options = {}) => newItems.push(XenoLib.createContextMenuItem(label, callback, id, options));
+            addElement('Open Logs', () => this.openWindow(), this.obfuscatedClass('open'));
+            addElement(
+              `Open Log For Channel`,
+              () => {
+                this.menu.filter = `channel:${props.channel.id}`;
+                this.openWindow();
+              },
+              this.obfuscatedClass('open-channel')
+            );
+            handleWhiteBlackList(newItems, props.channel.id);
+            if (!newItems.length) return;
+            menu.push(XenoLib.createContextMenuGroup([XenoLib.createContextMenuSubMenu(this.settings.contextmenuSubmenuName, newItems, this.obfuscatedClass('mlv2'))]));
+          }
+        )
+      );
+      return true;
+    };
+    this.unpatches.push(XenoLib.listenLazyContextMenu('GroupDMUserContextMenu', groupDMUserContextMenuPatch));
+
   }
   /* ==================================================-|| END CONTEXT MENU ||-================================================== */
 };
