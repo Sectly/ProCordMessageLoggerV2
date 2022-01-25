@@ -1,6 +1,6 @@
 /**
  * @name ProCord_MessageLogger
- * @version 1.9.1
+ * @version 1.9.1.1
  * @author Sectly_playz#1404
  * @authorId 587708664488656933
  * @description Message Logger For Pro-Cord Or Discord
@@ -39,7 +39,7 @@ module.exports = class MessageLoggerV2 {
     return 'MessageLoggerV2';
   }
   getVersion() {
-    return '1.9.1';
+    return '1.9.1.1';
   }
   getAuthor() {
     return 'Sectly_playz#1404';
@@ -699,6 +699,18 @@ module.exports = class MessageLoggerV2 {
                 .${this.style.deleted} .${this.classes.markup}, .${this.style.deleted} .${this.classes.markup} .hljs, .${this.style.deleted} .container-1ov-mD *{
                     color: #f04747 !important;
                 }
+
+                .${this.style.deletedAlt} .${this.classes.markup}, .${this.style.deletedAlt} .${this.classes.markup} .hljs, .${this.style.deletedAlt} .container-1ov-mD *{
+                    color: #f04747 !important;
+                }
+                .theme-dark .${this.style.deletedAlt}:not(:hover) img:not(.${this.classes.avatar}), .${this.style.deletedAlt}:not(:hover) .mention, .${this.style.deletedAlt}:not(:hover) .reactions, .${this.style.deletedAlt}:not(:hover) a {
+                    filter: grayscale(100%) !important;
+                }
+
+                .${this.style.deletedAlt} img:not(.${this.classes.avatar}), .${this.style.deletedAlt} .mention, .${this.style.deletedAlt} .reactions, .${this.style.deletedAlt} a {
+                    transition: filter 0.3s !important;
+                }
+
                 html #app-mount .${this.style.deletedAlt} {
                   background-color: rgba(240, 71, 71, 0.15) !important;
                 }
