@@ -1,6 +1,6 @@
 /**
  * @name ProCord_MessageLogger
- * @version 1.9.13
+ * @version 1.9.14
  * @author Sectly_playz#1404
  * @authorId 587708664488656933
  * @description Message Logger For Pro-Cord Or Discord
@@ -39,7 +39,7 @@ module.exports = class MessageLoggerV2 {
     return 'MessageLoggerV2';
   }
   getVersion() {
-    return '1.9.13';
+    return '1.9.14';
   }
   getAuthor() {
     return 'Sectly_playz#1404';
@@ -184,7 +184,7 @@ module.exports = class MessageLoggerV2 {
       {
         title: 'Fixed',
         type: 'fixed',
-        items: ['Fixed context menus being brok.', 'Tooltips work again.', '<a:FA_FoxWork:742462902384197752>']
+        items: ['Fixed not working on canary at all.', '<a:FA_FoxWork:742462902384197752>']
       }
     ];
   }
@@ -211,7 +211,7 @@ module.exports = class MessageLoggerV2 {
     if (BdApi.Plugins && BdApi.Plugins.get('MessageLogger') && BdApi.Plugins.isEnabled('MessageLogger')) XenoLib.Notifications.warning(`[**${this.getName()}**] Using **MessageLogger** with **${this.getName()}** is completely unsupported and will cause issues. Please either disable **MessageLogger** or delete it to avoid issues.`, { timeout: 0 });
     if (window.ED && !this.__isPowerCord) XenoLib.Notifications.warning(`[${this.getName()}] EnhancedDiscord is unsupported! Expect unintended issues and bugs.`, { timeout: 7500 });
     const shouldPass = e => e && e.constructor && typeof e.constructor.name === 'string' && e.constructor.name.indexOf('HTML');
-    if (shouldPass(window.Lightcord)) XenoLib.Notifications.warning(`[${this.getName()}] Lightcord is an unofficial and unsafe client with stolen code that is falsely advertising that it is safe, Lightcord has allowed the spread of token loggers hidden within plugins redistributed by them, and these plugins are not made to work on it. Your account is very likely compromised by malicious people redistributing other peoples plugins, especially if you didn't download this plugin from [Site](https://www.sectly.online/Pro-Cord-Theme/Download.html)/[GitHub](https://github.com/Sectly/ProCordMessageLoggerV2), you should change your password immediately. Consider using a trusted client mod like [BandagedBD](https://rauenzi.github.io/BetterDiscordApp/) or [Powercord](https://powercord.dev/) to avoid losing your account.`, { timeout: 0 });
+    if (shouldPass(window.Lightcord)) XenoLib.Notifications.warning(`[${this.getName()}] Lightcord is an unofficial and unsafe client with stolen code that is falsely advertising that it is safe, Lightcord has allowed the spread of token loggers hidden within plugins redistributed by them, and these plugins are not made to work on it. Your account is very likely compromised by malicious people redistributing other peoples plugins, especially if you didn't download this plugin from [GitHub](https://github.com/Sectly/ProCordMessageLoggerV2), you should change your password immediately. Consider using a trusted client mod like [BandagedBD](https://rauenzi.github.io/BetterDiscordApp/) or [Powercord](https://powercord.dev/) to avoid losing your account.`, { timeout: 0 });
     let defaultSettings = {
       obfuscateCSSClasses: true,
       autoBackup: false,
@@ -265,7 +265,7 @@ module.exports = class MessageLoggerV2 {
       displayDates: true,
       deletedMessageColor: '',
       editedMessageColor: '',
-      useAlternativeDeletedStyle: false,
+      useAlternativeDeletedStyle: true,
       showEditedMessages: true,
       showDeletedMessages: true,
       showPurgedMessages: true,
@@ -519,13 +519,13 @@ module.exports = class MessageLoggerV2 {
       isBlocked: ZeresPluginLibrary.WebpackModules.getByProps('isBlocked').isBlocked,
       createMomentObject: ZeresPluginLibrary.WebpackModules.getByProps('createFromInputFallback'),
       isMentioned: (e, id) =>
-        mentionedModule.isMentioned(
-          id,
-          e.channel_id,
-          e.mentionEveryone || e.mention_everyone,
-          e.mentions.map(e => e.id || e),
-          e.mentionRoles || e.mention_roles
-        ),
+      (mentionedModule.isMentioned.length === 1 ? mentionedModule.isMentioned({ userId: id, channelId: e.channel_id, mentionEveryone: e.mentionEveryone || e.mention_everyone, mentionUsers: e.mentions.map(e => e.id || e), mentionRoles: e.mentionRoles || e.mention_roles }) : mentionedModule.isMentioned(
+        id,
+        e.channel_id,
+        e.mentionEveryone || e.mention_everyone,
+        e.mentions.map(e => e.id || e),
+        e.mentionRoles || e.mention_roles
+      )),
       DiscordUtils: ZeresPluginLibrary.WebpackModules.getByProps('bindAll', 'debounce')
     };
 
@@ -705,6 +705,19 @@ module.exports = class MessageLoggerV2 {
                 html #app-mount .${this.style.deletedAlt}:hover, html #app-mount .${this.style.deletedAlt}.selected-2P5D_Z {
                   background-color: rgba(240, 71, 71, 0.10) !important;
                 }
+				
+				.${this.style.deleted} .${this.classes.markup}, .${this.style.deletedAlt} .${this.classes.markup} .hljs, .${this.style.deleted} .container-1ov-mD *{
+                    color: #f04747 !important;
+                }
+
+                .theme-dark .${this.style.deletedAlt}:not(:hover) img:not(.${this.classes.avatar}), .${this.style.deletedAlt}:not(:hover) .mention, .${this.style.deletedAlt}:not(:hover) .reactions, .${this.style.deletedAlt}:not(:hover) a {
+                    filter: grayscale(100%) !important;
+                }
+
+                .${this.style.deletedAlt} img:not(.${this.classes.avatar}), .${this.style.deletedAlt} .mention, .${this.style.deletedAlt} .reactions, .${this.style.deletedAlt} a {
+                    transition: filter 0.3s !important;
+                }
+				
                 .theme-dark .${this.classes.markup}.${this.style.edited} .${this.style.edited} {
                     filter: brightness(70%);
                 }
