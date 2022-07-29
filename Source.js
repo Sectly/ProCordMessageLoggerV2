@@ -1,6 +1,6 @@
 /**
  * @name ProCord_MessageLogger
- * @version 1.9.15
+ * @version 1.9.17
  * @author Sectly_playz#1404
  * @authorId 587708664488656933
  * @description Message Logger For Pro-Cord Or Discord
