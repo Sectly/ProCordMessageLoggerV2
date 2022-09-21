@@ -1,6 +1,6 @@
 /**
  * @name ProCord_MessageLogger
- * @version 1.9.19
+ * @version 1.9.20
  * @author Sectly_playz#1404
  * @authorId 587708664488656933
  * @description Message Logger For Pro-Cord Or Discord
@@ -43,7 +43,7 @@ module.exports = class MessageLoggerV2 {
     return 'MessageLoggerV2';
   }
   getVersion() {
-    return '1.9.19';
+    return '1.9.20';
   }
   getAuthor() {
     return 'Sectly_playz#1404';
@@ -186,7 +186,7 @@ module.exports = class MessageLoggerV2 {
       {
         title: 'Fixed',
         type: 'fixed',
-        items: ['Fixed not working and causing crashes.']
+        items: ['Fixed incompatibility with another plugin by Tharki.']
       }
     ];
   }
@@ -209,7 +209,7 @@ module.exports = class MessageLoggerV2 {
     try {
       ZeresPluginLibrary.PluginUpdater.checkForUpdate(this.getName(), this.getVersion(), 'https://raw.githubusercontent.com/Sectly/ProCordMessageLoggerV2/main/Source.js');
     } catch (err) {}
-    if (window.PluginUpdates && window.PluginUpdates.plugins) delete PluginUpdates.plugins['https://raw.githubusercontent.com/Sectly/ProCordMessageLoggerV2/main/OldSource.js'];
+    if (window.PluginUpdates && window.PluginUpdates.plugins) delete PluginUpdates.plugins['https://raw.githubusercontent.com/Sectly/ProCordMessageLoggerV2/main/Source.js'];
     if (BdApi.Plugins && BdApi.Plugins.get('NoDeleteMessages') && BdApi.Plugins.isEnabled('NoDeleteMessages')) XenoLib.Notifications.warning(`[**${this.getName()}**] Using **NoDeleteMessages** with **${this.getName()}** is completely unsupported and will cause issues. Please either disable **NoDeleteMessages** or delete it to avoid issues.`, { timeout: 0 });
     if (BdApi.Plugins && BdApi.Plugins.get('SuppressUserMentions') && BdApi.Plugins.isEnabled('SuppressUserMentions')) XenoLib.Notifications.warning(`[**${this.getName()}**] Using **SuppressUserMentions** with **${this.getName()}** is completely unsupported and will cause issues. Please either disable **SuppressUserMentions** or delete it to avoid issues.`, { timeout: 0 });
     const shouldPass = e => e && e.constructor && typeof e.constructor.name === 'string' && e.constructor.name.indexOf('HTML');
@@ -266,7 +266,7 @@ module.exports = class MessageLoggerV2 {
       displayDates: true,
       deletedMessageColor: '',
       editedMessageColor: '',
-      useAlternativeDeletedStyle: true,
+      useAlternativeDeletedStyle: false,
       showEditedMessages: true,
       showDeletedMessages: true,
       showPurgedMessages: true,
@@ -519,14 +519,7 @@ module.exports = class MessageLoggerV2 {
       getUserAsync: ZeresPluginLibrary.WebpackModules.getByProps('getUser', 'acceptAgreements').getUser,
       isBlocked: ZeresPluginLibrary.WebpackModules.getByProps('isBlocked').isBlocked,
       createMomentObject: ZeresPluginLibrary.WebpackModules.getByProps('createFromInputFallback'),
-      isMentioned: (e, id) =>
-      (mentionedModule.isMentioned.length === 1 ? mentionedModule.isMentioned({ userId: id, channelId: e.channel_id, mentionEveryone: e.mentionEveryone || e.mention_everyone, mentionUsers: e.mentions.map(e => e.id || e), mentionRoles: e.mentionRoles || e.mention_roles }) : mentionedModule.isMentioned(
-        id,
-        e.channel_id,
-        e.mentionEveryone || e.mention_everyone,
-        e.mentions.map(e => e.id || e),
-        e.mentionRoles || e.mention_roles
-      )),
+      isMentioned: (e, id) => mentionedModule.isMentioned({ userId: id, channelId: e.channel_id, mentionEveryone: e.mentionEveryone || e.mention_everyone, mentionUsers: e.mentions.map(e => e.id || e), mentionRoles: e.mentionRoles || e.mention_roles }),
       DiscordUtils: ZeresPluginLibrary.WebpackModules.getByProps('bindAll', 'debounce')
     };
 
@@ -702,9 +695,6 @@ module.exports = class MessageLoggerV2 {
                 .${this.style.deleted} .${this.classes.markup}, .${this.style.deleted} .${this.classes.markup} .hljs, .${this.style.deleted} .container-1ov-mD *{
                     color: #f04747 !important;
                 }
-				.${this.style.deletedAlt} .${this.classes.markup}, .${this.style.deletedAlt} .${this.classes.markup} .hljs, .${this.style.deletedAlt} .container-1ov-mD *{
-                    color: #f04747 !important;
-                }
                 html #app-mount .${this.style.deletedAlt} {
                   background-color: rgba(240, 71, 71, 0.15) !important;
                 }
@@ -727,14 +717,6 @@ module.exports = class MessageLoggerV2 {
                 }
 
                 .${this.style.deleted} img:not(.${this.classes.avatar}), .${this.style.deleted} .mention, .${this.style.deleted} .reactions, .${this.style.deleted} a {
-                    transition: filter 0.3s !important;
-                }
-				
-				.theme-dark .${this.style.deletedAlt}:not(:hover) img:not(.${this.classes.avatar}), .${this.style.deletedAlt}:not(:hover) .mention, .${this.style.deletedAlt}:not(:hover) .reactions, .${this.style.deletedAlt}:not(:hover) a {
-                    filter: grayscale(100%) !important;
-                }
-
-                .${this.style.deletedAlt} img:not(.${this.classes.avatar}), .${this.style.deletedAlt} .mention, .${this.style.deletedAlt} .reactions, .${this.style.deletedAlt} a {
                     transition: filter 0.3s !important;
                 }
 
@@ -1723,7 +1705,7 @@ module.exports = class MessageLoggerV2 {
     div.style.display = 'inline-flex';
     div.appendChild(this.createButton('Changelog', () => XenoLib.showChangelog(`${this.getName()} has been updated!`, this.getVersion(), this.getChanges())));
     div.appendChild(this.createButton('Stats', () => this.showStatsModal()));
-    div.appendChild(this.createButton('Donate', () => this.nodeModules.electron.shell.openExternal('https://www.roblox.com/catalog/7929605669/Donation')));
+    div.appendChild(this.createButton('Donate', () => this.nodeModules.electron.shell.openExternal('https://www.buymeacoffee.com/sectly')));
     div.appendChild(this.createButton('Help', () => this.showLoggerHelpModal()));
     let button = div.firstElementChild;
     while (button) {
@@ -2579,6 +2561,7 @@ module.exports = class MessageLoggerV2 {
   /* ==================================================-|| END MESSAGE MANAGMENT ||-================================================== */
   onDispatchEvent(args, callDefault) {
     const dispatch = args[0];
+    let ret = Promise.resolve();
 
     if (!dispatch) return callDefault(...args);
 
@@ -2587,14 +2570,14 @@ module.exports = class MessageLoggerV2 {
         clearTimeout(this.selfTestTimeout);
         //console.log('Self test OK');
         this.selfTestFailures = 0;
-        return;
+        return ret;
       }
       // if (dispatch.type == 'EXPERIMENT_TRIGGER') return callDefault(...args);
       // console.log('INFO: onDispatchEvent -> dispatch', dispatch);
       if (dispatch.type === 'CHANNEL_SELECT') {
-        callDefault(...args);
+        ret = callDefault(...args);
         this.selectedChannel = this.getSelectedTextChannel();
-        return;
+        return ret;
       }
 
       if (dispatch.ML2 && dispatch.type === 'MESSAGE_DELETE') return callDefault(...args);
@@ -2805,8 +2788,8 @@ module.exports = class MessageLoggerV2 {
         if (!deleted) return callDefault(...args); // nothing we can do past this point..
 
         if (this.deletedMessageRecord[channel.id] && this.deletedMessageRecord[channel.id].findIndex(m => m === deleted.id) != -1) {
-          if (!this.settings.showDeletedMessages) callDefault(...args);
-          return;
+          if (!this.settings.showDeletedMessages) ret = callDefault(...args);
+          return ret;
         }
 
         if (deleted.type !== 0 && deleted.type !== 19 && (deleted.type !== 20 || (deleted.flags & 64) === 64)) return callDefault(...args);
@@ -2850,7 +2833,7 @@ module.exports = class MessageLoggerV2 {
 
         this.saveDeletedMessage(deleted, this.deletedMessageRecord);
         // if (this.settings.cacheAllImages) this.cacheImages(deleted);
-        if (!this.settings.showDeletedMessages) callDefault(...args);
+        if (!this.settings.showDeletedMessages) ret = callDefault(...args);
         else if (XenoLib.DiscordAPI.channelId === dispatch.channelId) this.dispatcher.dispatch({ type: 'MLV2_FORCE_UPDATE_MESSAGE', id: dispatch.id });
         this.saveData();
       } else if (dispatch.type == 'MESSAGE_DELETE_BULK') {
@@ -2896,7 +2879,7 @@ module.exports = class MessageLoggerV2 {
             }
           }
         }
-        if (!this.settings.showPurgedMessages) callDefault(...args);
+        if (!this.settings.showPurgedMessages) ret = callDefault(...args);
         this.saveData();
       } else if (dispatch.type == 'MESSAGE_UPDATE') {
         if (!dispatch.message.edited_timestamp) {
@@ -3037,11 +3020,12 @@ module.exports = class MessageLoggerV2 {
             }
           }
         }
-        callDefault(...args);
-      } else callDefault(...args);
+        return callDefault(...args);
+      } else return callDefault(...args);
     } catch (err) {
       ZeresPluginLibrary.Logger.stacktrace(this.getName(), 'Error in onDispatchEvent', err);
     }
+    return ret;
   }
   /* ==================================================-|| START MENU ||-================================================== */
   processUserRequestQueue() {
